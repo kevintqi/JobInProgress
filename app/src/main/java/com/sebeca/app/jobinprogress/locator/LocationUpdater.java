@@ -9,14 +9,13 @@ import java.util.ArrayDeque;
 
 public class LocationUpdater implements LocationListener{
     private static final String TAG = LocationUpdater.class.getSimpleName();
-
-    private ArrayDeque<LocationData> mItemQueue = new ArrayDeque<>();
     private final Object lock = new Object();
+    private ArrayDeque<LocationData> mItemQueue = new ArrayDeque<>();
 
-    public LocationData[] popItemQueue() {
-        LocationData[] items;
+    public Object[] popItemQueue() {
+        Object[] items;
         synchronized (lock) {
-            items = (LocationData[]) mItemQueue.toArray();
+            items = mItemQueue.toArray();
             mItemQueue.clear();
         }
         return items;
