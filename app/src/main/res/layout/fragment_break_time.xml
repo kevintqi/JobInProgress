@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.sebeca.app.jobinprogress.breaktime.BreakTimeViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="400dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="154dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/startBreakButton"
+                android:layout_width="176dp"
+                android:layout_height="130dp"
+                android:layout_weight="1"
+                android:onClick="@{viewModel.addBreakTime}"
+                app:srcCompat="@android:drawable/btn_star_big_on" />
+
+            <ImageButton
+                android:id="@+id/endBreakButton"
+                android:layout_width="177dp"
+                android:layout_height="130dp"
+                android:layout_weight="1"
+                android:onClick="@{viewModel.stopBreak}"
+                app:srcCompat="@android:drawable/checkbox_on_background" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="132dp"
+                android:layout_height="120dp"
+                android:text="Button" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

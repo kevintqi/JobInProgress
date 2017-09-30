@@ -1,6 +1,8 @@
 package com.sebeca.app.jobinprogress.locator;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -17,14 +19,29 @@ public class LocationReporter {
     private static final String TAG = LocationReporter.class.getSimpleName();
 
     private static final String URL = "https://www.sebeca.com/location";
-
+    private static final int MSG_ID = 101;
+    private static final int MSG_DELAY = 30000;
     private RequestQueue mRequestQueue;
+    private boolean mCancelled = false;
+    private Handler mHandler = new SenderHandler();
+    private LocationDataQueue mLocationDataQueue;
 
-    LocationReporter(Context context) {
+    LocationReporter(Context context, LocationDataQueue dataQueue) {
         mRequestQueue = Volley.newRequestQueue(context);
+        mLocationDataQueue = dataQueue;
     }
 
-    public void reportData(Object[] items) {
+    public synchronized void start() {
+        mCancelled = false;
+        mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_ID), MSG_DELAY);
+    }
+
+    public synchronized void cancel() {
+        mCancelled = true;
+    }
+
+    void reportData() {
+        Object[] items = mLocationDataQueue.popDataQueue();
         JSONArray data = buildRequest(items);
         if (data != null) {
             sendRequest(data);
@@ -60,5 +77,18 @@ public class LocationReporter {
         });
         mRequestQueue.add(request);
         Log.i(TAG, "sent: " + data.toString());
+    }
+
+    private class SenderHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            synchronized (LocationReporter.this) {
+                if (mCancelled) {
+                    return;
+                }
+                reportData();
+                sendMessageDelayed(obtainMessage(MSG_ID), MSG_DELAY);
+            }
+        }
     }
 }

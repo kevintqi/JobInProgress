@@ -1,4 +1,4 @@
-package com.sebeca.app.jobinprogress;
+package com.sebeca.app.jobinprogress.activities;
 
 /**
  * Created by kevinqi on 9/5/17.
@@ -8,6 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.sebeca.app.jobinprogress.breaktime.BreakTimeFragment;
+import com.sebeca.app.jobinprogress.joblist.JobListFragment;
 
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -25,6 +28,14 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        switch (position) {
+            case SECTION_JOB_LIST:
+                return new JobListFragment();
+            case SECTION_BREAK_TIMER:
+                return new BreakTimeFragment();
+            case SECTION_SETTINGS:
+                return new JobListFragment();
+        }
         return new JobListFragment();
     }
 

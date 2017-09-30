@@ -1,4 +1,4 @@
-package com.sebeca.app.jobinprogress;
+package com.sebeca.app.jobinprogress.joblist;
 
 import android.databinding.ObservableField;
 
@@ -17,18 +17,20 @@ public final class Job {
 
     public String getAddress() {return mAddress;}
 
+    public ObservableField<String> getStatus() {
+        return mStatus;
+    }
+
     public void setStatus(String status) {
         mStatus.set(status);
     }
 
-    public ObservableField<String> getStatus() {return mStatus;}
+    public ObservableField<Integer> getIconId() {
+        return mIconId;
+    }
 
     public void setIconId(int iconId) {
         mIconId.set(iconId);
-    }
-
-    public ObservableField<Integer> getIconId() {
-        return mIconId;
     }
 
     public ObservableField<Long> getTargetStartTime() {

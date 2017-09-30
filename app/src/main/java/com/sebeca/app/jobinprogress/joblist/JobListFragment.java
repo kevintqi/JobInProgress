@@ -1,4 +1,4 @@
-package com.sebeca.app.jobinprogress;
+package com.sebeca.app.jobinprogress.joblist;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,11 +15,11 @@ import java.util.ArrayList;
 
 
 public class JobListFragment extends Fragment{
+    private final ArrayList<Job> mJobData = new ArrayList<>();
     private FragmentJobListBinding mBinding;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private JobListAdapter mJobListAdapter;
-    private final ArrayList<Job> mJobData = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

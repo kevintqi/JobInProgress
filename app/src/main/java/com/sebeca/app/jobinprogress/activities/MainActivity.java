@@ -1,4 +1,4 @@
-package com.sebeca.app.jobinprogress;
+package com.sebeca.app.jobinprogress.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +9,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.sebeca.app.jobinprogress.locator.LocationService;
+import com.sebeca.app.jobinprogress.R;
+import com.sebeca.app.jobinprogress.locator.LocationUpdater;
 
-import static com.sebeca.app.jobinprogress.SectionsPagerAdapter.SECTION_BREAK_TIMER;
-import static com.sebeca.app.jobinprogress.SectionsPagerAdapter.SECTION_JOB_LIST;
-import static com.sebeca.app.jobinprogress.SectionsPagerAdapter.SECTION_SETTINGS;
+import static com.sebeca.app.jobinprogress.activities.SectionsPagerAdapter.SECTION_BREAK_TIMER;
+import static com.sebeca.app.jobinprogress.activities.SectionsPagerAdapter.SECTION_JOB_LIST;
+import static com.sebeca.app.jobinprogress.activities.SectionsPagerAdapter.SECTION_SETTINGS;
 
 public class MainActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -47,14 +48,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(this, LocationService.class);
-        intent.putExtra(LocationService.ACTION_KEY, LocationService.ACTION_START);
+        Intent intent = new Intent(this, LocationUpdater.class);
+        intent.putExtra(LocationUpdater.ACTION_KEY, LocationUpdater.ACTION_START);
         startService(intent);
     }
 
     @Override
     protected void onStop() {
-        Intent intent = new Intent(this, LocationService.class);
+        Intent intent = new Intent(this, LocationUpdater.class);
         stopService(intent);
         super.onStop();
     }

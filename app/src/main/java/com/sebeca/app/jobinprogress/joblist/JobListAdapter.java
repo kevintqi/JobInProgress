@@ -1,35 +1,18 @@
-package com.sebeca.app.jobinprogress;
+package com.sebeca.app.jobinprogress.joblist;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.sebeca.app.jobinprogress.R;
 
 import java.util.ArrayList;
 
 
 public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHolder> {
     private final ArrayList<Job> mJobs;
-
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView mTextView;
-        public ViewHolder(View view) {
-            super(view);
-            mTextView = view.findViewById(R.id.itemTitle);
-            view.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-
-        }
-
-        public void bindJob(String title) {
-            mTextView.setText(title);
-        }
-    }
 
     public JobListAdapter(ArrayList<Job> jobs) {
         mJobs =jobs;
@@ -50,6 +33,25 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
     @Override
     public int getItemCount() {
         return mJobs.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private final TextView mTextView;
+
+        public ViewHolder(View view) {
+            super(view);
+            mTextView = view.findViewById(R.id.itemTitle);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+
+        }
+
+        public void bindJob(String title) {
+            mTextView.setText(title);
+        }
     }
 
 }
