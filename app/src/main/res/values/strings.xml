@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">JobInProgress</string>
+    <string name="button_text_stop">Stop</string>
+    <string name="button_text_start">Start</string>
+    <string name="status_text_start">Need a Break? Click \'Start\'</string>
+    <string name="button_text_add">Add 30min</string>
+    <string name="status_text_time_up">Time is Up. Back to Work</string>
 </resources>

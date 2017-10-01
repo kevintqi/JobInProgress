@@ -19,6 +19,7 @@ public class BreakTimeFragment extends Fragment {
         mBinding = FragmentBreakTimeBinding.inflate(inflater, container, false);
         mViewModel = new BreakTimeViewModel(getActivity());
         mBinding.setViewModel(mViewModel);
+        mBinding.setDataModel(mViewModel.getDataModel());
         return mBinding.getRoot();
     }
 
