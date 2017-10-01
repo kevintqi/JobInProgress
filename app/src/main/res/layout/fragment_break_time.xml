@@ -41,7 +41,7 @@
                 android:layout_marginStart="80dp"
                 android:background="@drawable/button_circle_green"
                 android:focusable="true"
-                android:onClick="@{viewModel.addBreakTime}"
+                android:onClick="@{viewModel::addBreakTime}"
                 android:padding="15dp"
                 android:text="@{dataModel.startButtonText}"
                 android:textColor="@color/white" />
@@ -54,7 +54,7 @@
                 android:layout_marginStart="30dp"
                 android:background="@drawable/button_circle_red"
                 android:focusable="true"
-                android:onClick="@{viewModel.stopBreak}"
+                android:onClick="@{viewModel::stopBreak}"
                 android:padding="15dp"
                 android:text="@string/button_text_stop"
                 android:textColor="@color/white" />
