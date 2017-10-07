@@ -1,10 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#438189</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#E43F3F</color>
+    <color name="colorPrimaryDark">#E12929</color>
+    <color name="colorAccent">#FFFFFF</color>
     <color name="white">#ffffff</color>
     <color name="lime">#32CD32</color>
     <color name="red">#ff0000</color>
     <color name="blue">#1E90FF</color>
+    <color name="primary">#E43F3F</color>
+    <color name="primary_dark">#E12929</color>
+    <color name="primary_darker">#CC1D1D</color>
+    <color name="accent">#FFFFFF</color>
+
+    <color name="black">#000000</color>
+    <color name="jet">#222222</color>
+    <color name="oil">#333333</color>
+    <color name="monsoon">#777777</color>
+    <color name="jumbo">#888888</color>
+    <color name="aluminum">#999999</color>
+    <color name="base">#AAAAAA</color>
+    <color name="iron">#CCCCCC</color>
+
+    <color name="transparent">#00ffffff</color>
+    <color name="emptyImage_placeholderBackground">#00454545</color>
+    <color name="common_active_text_color">#ebebeb</color>
+    <color name="common_inactive_text_color">#99ebebeb</color>
+    <color name="common_invalid_text_color">#f6b240</color>
+    <color name="common_active_text_color_zero_alpha">#00ebebeb</color>
+    <color name="blueHighlightBackground">#009FDB</color>
+    <color name="list_header_color">#0cd7d7d7</color>
+    <color name="list_divider_color">#339b9b9b</color>
+
+    <!--Gradient Colors for the background Start-->
+    <color name="light_blue">#475257</color>
+    <color name="dark_blue">#122633</color>
+    <!--Gradient Colors for the background End-->
+
+    <!-- Keyboard Start -->
+    <color name="keyboard_key_background">#26d7d7d7</color>
+    <color name="keyboard_key_background_active">#FF132733</color>
+    <color name="keyboard_key_border_active">#00b2ed</color>
+    <color name="keyboard_key_border_clicked">#C5E2ED</color>
+    <color name="keyboard_inactive_text_color">#726e6c</color>
+    <!-- Keyboard End-->
+
+    <!-- Network Security Start -->
+    <color name="security_selected_text_color">#ebebeb</color>
+    <color name="security_focused_text_color">#ebebeb</color>
+    <!-- Network Security End -->
+
+
+    <!-- SWDL Start -->
+    <color name="swdl_text_fpo">#40d8d8d8</color>
+    <color name="swdl_progressbar_background">#444444</color>
+    <color name="swdl_progressbar_progress">#999999</color>
+    <!-- SWDL End-->
+
+    <!--Network Setup Start -->
+    <color name="network_setup_mac_color">#66ebebeb</color>
+    <!--Network Setup End -->
+
+    <!-- Network Details Start -->
+    <color name="edittext_background_color">#99808080</color>
+    <!-- Network Details End -->
+
 </resources>
