@@ -1,8 +1,12 @@
 package com.sebeca.app.jobinprogress.login;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+
+import com.sebeca.app.jobinprogress.R;
 
 public class LoginViewModel {
 
@@ -14,8 +18,15 @@ public class LoginViewModel {
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+
+    private Context mContext;
     private LoginModel mDataModel = new LoginModel();
     private Listener mListener;
+    private UserLoginTask mAuthTask = null;
+
+    public LoginViewModel(Context context) {
+        mContext = context;
+    }
 
     public LoginModel getDataModel() {
         return mDataModel;
@@ -29,6 +40,8 @@ public class LoginViewModel {
         Log.d(TAG, "Email=" + mDataModel.getEmail().get() +
                 ",Password=" + mDataModel.getPassword().get());
         if (validate()) {
+            mAuthTask = new UserLoginTask();
+            mAuthTask.execute((Void) null);
             mListener.onLoginProgress();
         }
     }
@@ -60,6 +73,7 @@ public class LoginViewModel {
         return valid;
     }
 
+
     interface Listener {
         void onEmailError(@Nullable String msg);
 
@@ -69,9 +83,6 @@ public class LoginViewModel {
 
         void onLoginDone();
     }
-
-
-    //private UserLoginTask mAuthTask = null;
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -123,81 +134,53 @@ public class LoginViewModel {
 //            mAuthTask.execute((Void) null);
 //        }
 //    }
-//
-//    private boolean isEmailValid(String email) {
-//        //TODO: Replace this with your own logic
-//        return email.contains("@");
-//    }
-//
-//    private boolean isPasswordValid(String password) {
-//        //TODO: Replace this with your own logic
-//        return password.length() > 4;
-//    }
-//
-//    private interface ProfileQuery {
-//        String[] PROJECTION = {
-//                ContactsContract.CommonDataKinds.Email.ADDRESS,
-//                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-//        };
-//
-//        int ADDRESS = 0;
-//        int IS_PRIMARY = 1;
-//    }
-//
-//    /**
-//     * Represents an asynchronous login/registration task used to authenticate
-//     * the user.
-//     */
-//    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-//
-//        private final String mEmail;
-//        private final String mPassword;
-//
-//        UserLoginTask(String email, String password) {
-//            mEmail = email;
-//            mPassword = password;
-//        }
-//
-//        @Override
-//        protected Boolean doInBackground(Void... params) {
-//            // TODO: attempt authentication against a network service.
-//
-//            try {
-//                // Simulate network access.
-//                Thread.sleep(2000);
-//            } catch (InterruptedException e) {
-//                return false;
-//            }
-//
-//            for (String credential : DUMMY_CREDENTIALS) {
-//                String[] pieces = credential.split(":");
-//                if (pieces[0].equals(mEmail)) {
-//                    // Account exists, return true if the password matches.
-//                    return pieces[1].equals(mPassword);
-//                }
-//            }
-//
-//            // TODO: register the new account here.
-//            return true;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(final Boolean success) {
-//            mAuthTask = null;
-//            showProgress(false);
-//
-//            if (success) {
-//                finish();
-//            } else {
-//                mPasswordView.setError(getString(R.string.error_incorrect_password));
-//                mPasswordView.requestFocus();
-//            }
-//        }
-//
-//        @Override
-//        protected void onCancelled() {
-//            mAuthTask = null;
-//            showProgress(false);
-//        }
-//    }
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+
+            try {
+                // Simulate network access.
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                return false;
+            }
+
+            for (String credential : DUMMY_CREDENTIALS) {
+                String[] pieces = credential.split(":");
+                if (pieces[0].equals(mDataModel.getEmail().get())) {
+                    // Account exists, return true if the password matches.
+                    return pieces[1].equals(mDataModel.getPassword().get());
+                }
+            }
+
+            // TODO: register the new account here.
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mAuthTask = null;
+            mListener.onLoginDone();
+
+            if (success) {
+                //finish();
+                //Start MainActivity
+            } else {
+                mListener.onPasswordError(mContext.getString(R.string.error_incorrect_password));
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+            mListener.onLoginDone();
+        }
+    }
 }
