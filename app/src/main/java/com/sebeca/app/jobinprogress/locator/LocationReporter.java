@@ -6,11 +6,10 @@ import android.os.Message;
 import android.util.Log;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
+import com.sebeca.app.jobinprogress.network.MyRequestQueue;
 
 import org.json.JSONArray;
 
@@ -21,13 +20,13 @@ public class LocationReporter {
     private static final String URL = "https://www.sebeca.com/location";
     private static final int MSG_ID = 101;
     private static final int MSG_DELAY = 30000;
-    private RequestQueue mRequestQueue;
+    private Context mContext;
     private boolean mCancelled = false;
     private Handler mHandler = new SenderHandler();
     private LocationDataQueue mLocationDataQueue;
 
     LocationReporter(Context context, LocationDataQueue dataQueue) {
-        mRequestQueue = Volley.newRequestQueue(context);
+        mContext = context;
         mLocationDataQueue = dataQueue;
     }
 
@@ -75,7 +74,7 @@ public class LocationReporter {
                 Log.e(TAG, error.toString());
             }
         });
-        mRequestQueue.add(request);
+        MyRequestQueue.getInstance(mContext).addToQueue(request);
         Log.i(TAG, "sent: " + data.toString());
     }
 

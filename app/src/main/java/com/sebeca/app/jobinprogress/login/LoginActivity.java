@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.sebeca.app.jobinprogress.R;
+import com.sebeca.app.jobinprogress.network.MyRequestQueue;
 
 
 /**
@@ -23,6 +24,12 @@ public class LoginActivity extends AppCompatActivity implements FragmentSwitcher
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.login_container, mFragment).commit();
         FragmentSwitcher.setContainer(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        MyRequestQueue.getInstance(this).start();
     }
 
     @Override
