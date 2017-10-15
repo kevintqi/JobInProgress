@@ -1,4 +1,4 @@
-package com.sebeca.app.jobinprogress.activities;
+package com.sebeca.app.jobinprogress.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +12,9 @@ import android.view.View;
 import com.sebeca.app.jobinprogress.R;
 import com.sebeca.app.jobinprogress.locator.LocationUpdater;
 
-import static com.sebeca.app.jobinprogress.activities.SectionsPagerAdapter.SECTION_BREAK_TIMER;
-import static com.sebeca.app.jobinprogress.activities.SectionsPagerAdapter.SECTION_JOB_LIST;
-import static com.sebeca.app.jobinprogress.activities.SectionsPagerAdapter.SECTION_SETTINGS;
+import static com.sebeca.app.jobinprogress.main.SectionsPagerAdapter.SECTION_BREAK_TIMER;
+import static com.sebeca.app.jobinprogress.main.SectionsPagerAdapter.SECTION_JOB_LIST;
+import static com.sebeca.app.jobinprogress.main.SectionsPagerAdapter.SECTION_SETTINGS;
 
 public class MainActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;

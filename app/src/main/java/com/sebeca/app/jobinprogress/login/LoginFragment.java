@@ -1,8 +1,6 @@
 package com.sebeca.app.jobinprogress.login;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -10,9 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sebeca.app.jobinprogress.databinding.FragmentLoginBinding;
+import com.sebeca.app.jobinprogress.main.MainActivity;
 
 
-public class LoginFragment extends BaseFragment implements LoginViewModel.Listener {
+public class LoginFragment extends ProgressFragment implements ViewModelListener {
     private FragmentLoginBinding mBinding;
     private LoginViewModel mViewModel;
 
@@ -29,12 +28,15 @@ public class LoginFragment extends BaseFragment implements LoginViewModel.Listen
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
     }
 
     @Override
     public boolean allowBack() {
         return false;
+    }
+
+    @Override
+    public void onNameError(@Nullable String msg) {
     }
 
     @Override
@@ -48,47 +50,17 @@ public class LoginFragment extends BaseFragment implements LoginViewModel.Listen
     }
 
     @Override
-    public void onLoginProgress() {
-        mBinding.signInButton.setEnabled(false);
-        showProgress(true);
+    public void onActionProgress() {
+        mBinding.loginButton.setEnabled(false);
+        showProgress(mBinding.loginProgress, mBinding.loginForm, true);
     }
 
     @Override
-    public void onLoginDone() {
-        mBinding.signInButton.setEnabled(true);
-        showProgress(false);
-    }
-
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mBinding.loginForm.setVisibility(show ? View.GONE : View.VISIBLE);
-            mBinding.loginForm.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mBinding.loginForm.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mBinding.loginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
-            mBinding.loginProgress.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mBinding.loginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mBinding.loginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
-            mBinding.loginForm.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+    public void onActionDone() {
+        mBinding.loginButton.setEnabled(true);
+        showProgress(mBinding.loginProgress, mBinding.loginForm, false);
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        getContext().startActivity(intent);
     }
 
 }

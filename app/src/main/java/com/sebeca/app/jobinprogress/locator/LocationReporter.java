@@ -6,10 +6,8 @@ import android.os.Message;
 import android.util.Log;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.sebeca.app.jobinprogress.network.MyRequestQueue;
+import com.sebeca.app.jobinprogress.network.MyArrayRequest;
 
 import org.json.JSONArray;
 
@@ -24,6 +22,16 @@ public class LocationReporter {
     private boolean mCancelled = false;
     private Handler mHandler = new SenderHandler();
     private LocationDataQueue mLocationDataQueue;
+    private MyArrayRequest.Callback mCallback = new MyArrayRequest.Callback() {
+
+        @Override
+        public void onSuccess(JSONArray response) {
+        }
+
+        @Override
+        public void onError(VolleyError error) {
+        }
+    };
 
     LocationReporter(Context context, LocationDataQueue dataQueue) {
         mContext = context;
@@ -62,19 +70,8 @@ public class LocationReporter {
     }
 
     private void sendRequest(JSONArray data) {
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, URL, data,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.i(TAG, response.toString());
-                    }
-                }, new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, error.toString());
-            }
-        });
-        MyRequestQueue.getInstance(mContext).addToQueue(request);
+        MyArrayRequest request = new MyArrayRequest(mContext, URL, Request.Method.POST, mCallback);
+        request.send(data);
         Log.i(TAG, "sent: " + data.toString());
     }
 

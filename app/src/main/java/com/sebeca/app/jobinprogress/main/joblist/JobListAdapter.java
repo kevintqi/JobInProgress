@@ -1,4 +1,4 @@
-package com.sebeca.app.jobinprogress.joblist;
+package com.sebeca.app.jobinprogress.main.joblist;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

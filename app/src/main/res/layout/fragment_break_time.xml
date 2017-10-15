@@ -4,11 +4,11 @@
     <data>
         <variable
             name="viewModel"
-            type="com.sebeca.app.jobinprogress.breaktime.BreakTimeViewModel" />
+            type="com.sebeca.app.jobinprogress.main.breaktime.BreakTimeViewModel" />
 
         <variable
             name="dataModel"
-            type="com.sebeca.app.jobinprogress.breaktime.BreakTimeModel" />
+            type="com.sebeca.app.jobinprogress.main.breaktime.BreakTimeModel" />
     </data>
 
     <LinearLayout

@@ -1,4 +1,4 @@
-package com.sebeca.app.jobinprogress.joblist;
+package com.sebeca.app.jobinprogress.main.joblist;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

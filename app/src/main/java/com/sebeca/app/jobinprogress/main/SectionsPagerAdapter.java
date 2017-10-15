@@ -1,4 +1,4 @@
-package com.sebeca.app.jobinprogress.activities;
+package com.sebeca.app.jobinprogress.main;
 
 /**
  * Created by kevinqi on 9/5/17.
@@ -9,8 +9,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.sebeca.app.jobinprogress.breaktime.BreakTimeFragment;
-import com.sebeca.app.jobinprogress.joblist.JobListFragment;
+import com.sebeca.app.jobinprogress.main.breaktime.BreakTimeFragment;
+import com.sebeca.app.jobinprogress.main.joblist.JobListFragment;
 
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

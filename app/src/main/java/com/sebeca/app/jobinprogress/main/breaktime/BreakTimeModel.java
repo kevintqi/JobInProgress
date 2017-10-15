@@ -1,4 +1,4 @@
-package com.sebeca.app.jobinprogress.breaktime;
+package com.sebeca.app.jobinprogress.main.breaktime;
 
 import android.databinding.ObservableField;
 

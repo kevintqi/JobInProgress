@@ -24,14 +24,14 @@ public class FragmentSwitcher {
     public static BaseFragment newFragment(int fragmentId, Bundle argument) {
         switch (fragmentId) {
             case FRAGMENT_LOGIN:
-                return null;
+                return new LoginFragment();
             case FRAGMENT_SIGNUP:
-                return new SignupFragment();
+                return new SignUpFragment();
         }
         return null;
     }
 
-    interface Container {
+    public interface Container {
         void switchTo(Fragment fragment, boolean allowBack);
     }
 }
