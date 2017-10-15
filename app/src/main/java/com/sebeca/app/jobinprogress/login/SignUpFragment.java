@@ -5,7 +5,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.sebeca.app.jobinprogress.R;
 import com.sebeca.app.jobinprogress.databinding.FragmentSignUpBinding;
 
 
@@ -36,17 +38,17 @@ public class SignUpFragment extends ProgressFragment implements ViewModelListene
 
     @Override
     public void onNameError(String msg) {
-        mBinding.inputName.setError(msg);
+        mBinding.inputDataForm.inputName.setError(msg);
     }
 
     @Override
     public void onEmailError(String msg) {
-        mBinding.inputEmail.setError(msg);
+        mBinding.inputDataForm.inputEmail.setError(msg);
     }
 
     @Override
     public void onPasswordError(String msg) {
-        mBinding.inputPassword.setError(msg);
+        mBinding.inputDataForm.inputPassword.setError(msg);
     }
 
     @Override
@@ -56,9 +58,14 @@ public class SignUpFragment extends ProgressFragment implements ViewModelListene
     }
 
     @Override
-    public void onActionDone() {
+    public void onActionDone(boolean success) {
         mBinding.signUpButton.setEnabled(true);
         showProgress(mBinding.signUpProgress, mBinding.signUpForm, false);
-        FragmentSwitcher.to(FragmentSwitcher.FRAGMENT_LOGIN, null);
+        if (success) {
+            FragmentSwitcher.to(FragmentSwitcher.FRAGMENT_LOGIN, null);
+        } else {
+            Toast.makeText(getContext(), getContext().getString(R.string.error_sign_up_try_again),
+                    Toast.LENGTH_LONG).show();
+        }
     }
 }

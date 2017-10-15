@@ -3,32 +3,30 @@ package com.sebeca.app.jobinprogress.login;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.sebeca.app.jobinprogress.R;
 import com.sebeca.app.jobinprogress.network.MyObjectRequest;
 
 import org.json.JSONObject;
 
 public class SignUpViewModel {
     private static final String TAG = SignUpViewModel.class.getSimpleName();
-    private static final String URL = "http://www.google.com";
+
     private Context mContext;
-    private LoginModel mDataModel = new LoginModel();
+    private DataModel mDataModel = new DataModel(true);
     private ViewModelListener mListener;
     private MyObjectRequest.Callback mCallback = new MyObjectRequest.Callback() {
 
         @Override
         public void onSuccess(JSONObject response) {
-            mListener.onActionDone();
+            mListener.onActionDone(true);
         }
 
         @Override
         public void onError(VolleyError error) {
-            mListener.onActionDone();
-            Toast.makeText(mContext, "Sign up failed. Please try again.", Toast.LENGTH_LONG).show();
+            mListener.onActionDone(false);
         }
     };
 
@@ -40,21 +38,19 @@ public class SignUpViewModel {
         mListener = listener;
     }
 
-    public LoginModel getDataModel() {
+    public DataModel getDataModel() {
         return mDataModel;
     }
 
-    public void onClickSignUp(View button) {
-        Log.d(TAG, "SignUp");
-
+    public void onClickSignUp() {
         if (validateInput()) {
             sendRequest();
             mListener.onActionProgress();
         }
     }
 
-    public void onClickLogin(View v) {
-        mListener.onActionDone();
+    public void onClickLogin() {
+        mListener.onActionDone(true);
     }
 
     private boolean validateInput() {
@@ -62,19 +58,19 @@ public class SignUpViewModel {
         if (mDataModel.isValidName()) {
             mListener.onNameError(null);
         } else {
-            mListener.onNameError("at least 3 characters");
+            mListener.onNameError(mContext.getString(R.string.error_invalid_name));
             valid = false;
         }
         if (mDataModel.isValidEmail()) {
             mListener.onEmailError(null);
         } else {
-            mListener.onEmailError("enter a valid email address");
+            mListener.onEmailError(mContext.getString(R.string.error_invalid_email));
             valid = false;
         }
         if (mDataModel.isValidName()) {
             mListener.onPasswordError(null);
         } else {
-            mListener.onPasswordError("between 4 and 10 alphanumeric characters");
+            mListener.onPasswordError(mContext.getString(R.string.error_invalid_password));
             valid = false;
         }
         return valid;
@@ -82,9 +78,12 @@ public class SignUpViewModel {
 
     private void sendRequest() {
         try {
-            JSONObject data = new JSONObject();
-            MyObjectRequest request = new MyObjectRequest(mContext, URL, Request.Method.GET, mCallback);
-            request.send(data);
+            JSONObject data = mDataModel.toJSON();
+            if (data != null) {
+                final String url = mContext.getString(R.string.url_sign_up);
+                MyObjectRequest request = new MyObjectRequest(mContext, url, Request.Method.POST, mCallback);
+                request.send(data);
+            }
         } catch (Exception e) {
             Log.e(TAG, "Error:", e);
         }

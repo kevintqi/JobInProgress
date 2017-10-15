@@ -9,7 +9,7 @@ import android.support.v4.app.Fragment;
 
 public class FragmentSwitcher {
     public static final int FRAGMENT_LOGIN = 1;
-    public static final int FRAGMENT_SIGNUP = 2;
+    public static final int FRAGMENT_SIGN_UP = 2;
     private static Container mContainer;
 
     public static void setContainer(Container container) {
@@ -25,7 +25,7 @@ public class FragmentSwitcher {
         switch (fragmentId) {
             case FRAGMENT_LOGIN:
                 return new LoginFragment();
-            case FRAGMENT_SIGNUP:
+            case FRAGMENT_SIGN_UP:
                 return new SignUpFragment();
         }
         return null;

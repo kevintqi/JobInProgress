@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="dataModel"
-            type="com.sebeca.app.jobinprogress.login.LoginModel" />
+            type="com.sebeca.app.jobinprogress.login.DataModel" />
 
         <variable
             name="viewModel"
@@ -35,53 +36,15 @@
             android:id="@+id/login_form"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <LinearLayout
-                android:id="@+id/email_login_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="72dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="24dp"
-                    android:src="@mipmap/ic_launcher" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp">
-
-                    <EditText
-                        android:id="@+id/input_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Email"
-                        android:inputType="textEmailAddress"
-                        android:maxLines="1"
-                        android:text="@={dataModel.email}" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/input_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_password"
-                        android:imeActionId="@+id/login"
-                        android:imeActionLabel="@string/action_sign_in_short"
-                        android:imeOptions="actionUnspecified"
-                        android:inputType="textPassword"
-                        android:maxLines="1"
-                        android:text="@={dataModel.password}" />
-
-                </android.support.design.widget.TextInputLayout>
+                <include
+                    android:id="@+id/input_data_form"
+                    layout="@layout/include_login"
+                    bind:dataModel="@{dataModel}" />
 
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/login_button"
@@ -89,19 +52,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
                     android:layout_marginTop="24dp"
-                    android:onClick="@{viewModel::onClickLogin}"
+                    android:onClick="@{()->viewModel.onClickLogin()}"
                     android:padding="12dp"
-                    android:text="Login" />
+                    android:text="@string/action_login" />
 
                 <TextView
-                    android:id="@+id/link_signup"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
                     android:gravity="center"
-                    android:onClick="@{viewModel.onClickSignUp}"
-                    android:text="No account yet? Create one"
-                    android:textSize="16dip" />
+                    android:onClick="@{()->viewModel.onClickSignUp()}"
+                    android:text="@string/action_register"
+                    android:textSize="16sp" />
 
             </LinearLayout>
         </ScrollView>

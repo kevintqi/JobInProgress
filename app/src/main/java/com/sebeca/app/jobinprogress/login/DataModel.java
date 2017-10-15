@@ -9,13 +9,22 @@ import org.json.JSONObject;
  * DataModel for Login Screen
  */
 
-public class LoginModel {
+public class DataModel {
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_PASSWORD = "password";
+    private final boolean mHasName;
     private ObservableField<String> mName = new ObservableField<>();
     private ObservableField<String> mEmail = new ObservableField<>();
     private ObservableField<String> mPassword = new ObservableField<>();
+
+    public DataModel(boolean hasName) {
+        mHasName = hasName;
+    }
+
+    public final boolean hasName() {
+        return mHasName;
+    }
 
     public ObservableField<String> getName() {
         return mName;

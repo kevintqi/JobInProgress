@@ -6,11 +6,10 @@ import android.os.Build;
 import android.view.View;
 
 /**
- * Created by kevinqi on 10/14/17.
+ * Base class which allows switching between progress and form
  */
 
 public abstract class ProgressFragment extends BaseFragment {
-
     protected void showProgress(final View progress, final View form, final boolean show) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);

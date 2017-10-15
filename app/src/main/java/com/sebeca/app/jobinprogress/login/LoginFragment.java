@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import com.sebeca.app.jobinprogress.databinding.FragmentLoginBinding;
 import com.sebeca.app.jobinprogress.main.MainActivity;
 
-
+/**
+ * Login Screen
+ */
 public class LoginFragment extends ProgressFragment implements ViewModelListener {
     private FragmentLoginBinding mBinding;
     private LoginViewModel mViewModel;
@@ -32,21 +34,21 @@ public class LoginFragment extends ProgressFragment implements ViewModelListener
 
     @Override
     public boolean allowBack() {
-        return false;
+        return true;
     }
 
     @Override
-    public void onNameError(@Nullable String msg) {
+    public void onNameError(@Nullable String ignore) {
     }
 
     @Override
     public void onEmailError(@Nullable String msg) {
-        mBinding.inputEmail.setError(msg);
+        mBinding.inputDataForm.inputEmail.setError(msg);
     }
 
     @Override
     public void onPasswordError(@Nullable String msg) {
-        mBinding.inputPassword.setError(msg);
+        mBinding.inputDataForm.inputPassword.setError(msg);
     }
 
     @Override
@@ -55,12 +57,16 @@ public class LoginFragment extends ProgressFragment implements ViewModelListener
         showProgress(mBinding.loginProgress, mBinding.loginForm, true);
     }
 
+    /**
+     * Stop the progressbar and start the MainActivity
+     */
     @Override
-    public void onActionDone() {
+    public void onActionDone(boolean success) {
         mBinding.loginButton.setEnabled(true);
         showProgress(mBinding.loginProgress, mBinding.loginForm, false);
-        Intent intent = new Intent(getContext(), MainActivity.class);
-        getContext().startActivity(intent);
+        if (success) {
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            getContext().startActivity(intent);
+        }
     }
-
 }
