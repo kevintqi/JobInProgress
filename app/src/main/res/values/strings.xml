@@ -21,7 +21,8 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_sign_up_try_again">Sign up failed. Please try again</string>
-    <string name="url_login">https://www.sebeca.com/login</string>
-    <string name="url_sign_up">https://www.sebeca.com/signup</string>
+    <string name="server_url">https://www.sebeca.com</string>
+    <string name="url_login">/login</string>
+    <string name="url_sign_up">/signup</string>
 
 </resources>

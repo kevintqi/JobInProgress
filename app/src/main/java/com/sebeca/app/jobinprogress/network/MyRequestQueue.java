@@ -9,6 +9,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
+import com.sebeca.app.jobinprogress.R;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -16,15 +17,20 @@ import java.net.CookiePolicy;
 
 
 public class MyRequestQueue {
+    private static final String TAG = "SEBECA";
     static MyRequestQueue mInstance;
     RequestQueue mRequestQueue;
+    MyCookieStore myCookieStore;
+    String mServerUrl;
 
     private MyRequestQueue(Context context) {
-        CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
+        myCookieStore = new MyCookieStore(context);
+        CookieHandler.setDefault(new CookieManager(myCookieStore, CookiePolicy.ACCEPT_ALL));
         Cache cache = new DiskBasedCache(context.getApplicationContext().getCacheDir(), 1024 * 1024); // 1MB cap
         // Set up the network to use HttpURLConnection as the HTTP client.
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);
+        mServerUrl = context.getString(R.string.server_url);
     }
 
     public static synchronized MyRequestQueue getInstance(Context context) {
@@ -39,6 +45,23 @@ public class MyRequestQueue {
     }
 
     public <T> void addToQueue(Request<T> req) {
+        req.setTag(TAG);
         mRequestQueue.add(req);
+    }
+
+    public void cancelAll() {
+        mRequestQueue.cancelAll(TAG);
+    }
+
+    public boolean hasAuthenticated() {
+        return false;
+    }
+
+    public String getServerUrl() {
+        return mServerUrl;
+    }
+
+    public void setServerUrl(String url) {
+        mServerUrl = url;
     }
 }

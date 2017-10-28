@@ -40,6 +40,15 @@ public class LoginActivity extends AppCompatActivity implements FragmentSwitcher
             transaction.addToBackStack(null);
         }
         transaction.commit();
+
+    }
+
+    @Override
+    public void backToPrevious() {
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStack();
+        }
     }
 }
 

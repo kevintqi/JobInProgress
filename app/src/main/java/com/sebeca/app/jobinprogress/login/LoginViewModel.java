@@ -7,6 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.sebeca.app.jobinprogress.R;
 import com.sebeca.app.jobinprogress.network.MyObjectRequest;
+import com.sebeca.app.jobinprogress.network.MyRequestQueue;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,7 +92,7 @@ public class LoginViewModel {
         try {
             data = mDataModel.toJSON();
             if (data != null) {
-                String url = mContext.getString(R.string.url_login);
+                String url = MyRequestQueue.getInstance(mContext).getServerUrl() + mContext.getString(R.string.url_login);
                 MyObjectRequest request = new MyObjectRequest(mContext, url, Request.Method.POST, mCallBack);
                 request.send(data);
                 Log.i(TAG, "sent: " + data.toString());

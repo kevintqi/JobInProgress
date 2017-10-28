@@ -8,6 +8,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.sebeca.app.jobinprogress.R;
 import com.sebeca.app.jobinprogress.network.MyObjectRequest;
+import com.sebeca.app.jobinprogress.network.MyRequestQueue;
 
 import org.json.JSONObject;
 
@@ -80,7 +81,7 @@ public class SignUpViewModel {
         try {
             JSONObject data = mDataModel.toJSON();
             if (data != null) {
-                final String url = mContext.getString(R.string.url_sign_up);
+                final String url = MyRequestQueue.getInstance(mContext).getServerUrl() + mContext.getString(R.string.url_sign_up);
                 MyObjectRequest request = new MyObjectRequest(mContext, url, Request.Method.POST, mCallback);
                 request.send(data);
             }

@@ -28,6 +28,7 @@ public class SignUpFragment extends ProgressFragment implements ViewModelListene
         mViewModel.setListener(this);
         mBinding.setViewModel(mViewModel);
         mBinding.setDataModel(mViewModel.getDataModel());
+        mBinding.setViewModelSwitchServer(new SwitchServerViewModel());
         return mBinding.getRoot();
     }
 

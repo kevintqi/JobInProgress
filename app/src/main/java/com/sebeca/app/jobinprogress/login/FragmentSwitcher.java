@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 public class FragmentSwitcher {
     public static final int FRAGMENT_LOGIN = 1;
     public static final int FRAGMENT_SIGN_UP = 2;
+    public static final int FRAGMENT_SERVER = 3;
     private static Container mContainer;
 
     public static void setContainer(Container container) {
@@ -27,12 +28,20 @@ public class FragmentSwitcher {
                 return new LoginFragment();
             case FRAGMENT_SIGN_UP:
                 return new SignUpFragment();
+            case FRAGMENT_SERVER:
+                return new ServerFragment();
         }
         return null;
     }
 
+    public static void back() {
+        mContainer.backToPrevious();
+    }
+
     public interface Container {
         void switchTo(Fragment fragment, boolean allowBack);
+
+        void backToPrevious();
     }
 }
 

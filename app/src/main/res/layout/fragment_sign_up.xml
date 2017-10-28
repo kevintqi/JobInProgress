@@ -11,6 +11,11 @@
         <variable
             name="viewModel"
             type="com.sebeca.app.jobinprogress.login.SignUpViewModel" />
+
+        <variable
+            name="viewModelSwitchServer"
+            type="com.sebeca.app.jobinprogress.login.SwitchServerViewModel" />
+
     </data>
 
     <LinearLayout
@@ -44,7 +49,8 @@
                 <include
                     android:id="@+id/input_data_form"
                     layout="@layout/include_login"
-                    bind:dataModel="@{dataModel}" />
+                    bind:dataModel="@{dataModel}"
+                    bind:viewModel="@{viewModelSwitchServer}" />
 
                 <!-- SignUp Button -->
                 <android.support.v7.widget.AppCompatButton

@@ -8,6 +8,10 @@
         <variable
             name="dataModel"
             type="com.sebeca.app.jobinprogress.login.DataModel" />
+
+        <variable
+            name="viewModel"
+            type="com.sebeca.app.jobinprogress.login.SwitchServerViewModel" />
     </data>
 
     <LinearLayout
@@ -20,6 +24,7 @@
             android:layout_height="72dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="24dp"
+            android:onClick="@{()->viewModel.onClickSwitchToUrlSetting()}"
             android:src="@mipmap/ic_launcher" />
 
         <!--  Name Label -->

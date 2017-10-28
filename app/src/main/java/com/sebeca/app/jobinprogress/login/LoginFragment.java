@@ -25,6 +25,7 @@ public class LoginFragment extends ProgressFragment implements ViewModelListener
         mViewModel.setListener(this);
         mBinding.setViewModel(mViewModel);
         mBinding.setDataModel(mViewModel.getDataModel());
+        mBinding.setViewModelSwitchServer(new SwitchServerViewModel());
         return mBinding.getRoot();
     }
 
