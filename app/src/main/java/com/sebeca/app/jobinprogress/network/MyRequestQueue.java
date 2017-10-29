@@ -10,6 +10,7 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.sebeca.app.jobinprogress.R;
+import com.sebeca.app.jobinprogress.data.ServerUrlDataStore;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -29,10 +30,10 @@ public class MyRequestQueue {
         // Set up the network to use HttpURLConnection as the HTTP client.
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);
-        PersistentDataStore dataStore = new PersistentDataStore(context);
-        if (dataStore.getServerUrl() == null) {
+        ServerUrlDataStore dataStore = new ServerUrlDataStore(context);
+        if (!dataStore.isAvailable()) {
             String serverUrl = context.getString(R.string.server_url);
-            dataStore.putServerUrl(serverUrl);
+            dataStore.put(serverUrl);
         }
     }
 

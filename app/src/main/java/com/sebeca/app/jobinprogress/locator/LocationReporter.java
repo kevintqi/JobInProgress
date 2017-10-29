@@ -8,8 +8,8 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.sebeca.app.jobinprogress.R;
+import com.sebeca.app.jobinprogress.data.ServerUrlDataStore;
 import com.sebeca.app.jobinprogress.network.MyArrayRequest;
-import com.sebeca.app.jobinprogress.network.PersistentDataStore;
 
 import org.json.JSONArray;
 
@@ -71,8 +71,8 @@ public class LocationReporter {
     }
 
     private void sendRequest(JSONArray data) {
-        PersistentDataStore dataStore = new PersistentDataStore(mContext);
-        final String url = dataStore.getServerUrl() + mContext.getString(R.string.url_location);
+        ServerUrlDataStore dataStore = new ServerUrlDataStore(mContext);
+        final String url = dataStore.get() + mContext.getString(R.string.url_location);
         Log.i(TAG, "URL: " + url);
         MyArrayRequest request = new MyArrayRequest(mContext, url, Request.Method.POST, mCallback);
         request.send(data);

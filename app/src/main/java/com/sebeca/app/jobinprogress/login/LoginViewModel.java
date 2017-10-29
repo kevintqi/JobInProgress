@@ -6,8 +6,9 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.sebeca.app.jobinprogress.R;
+import com.sebeca.app.jobinprogress.data.ServerUrlDataStore;
+import com.sebeca.app.jobinprogress.data.UserDataStore;
 import com.sebeca.app.jobinprogress.network.MyObjectRequest;
-import com.sebeca.app.jobinprogress.network.PersistentDataStore;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,8 +30,8 @@ public class LoginViewModel {
         @Override
         public void onSuccess(JSONObject response) {
             mListener.onActionDone(true);
-            PersistentDataStore dataStore = new PersistentDataStore(mContext);
-            dataStore.puUser(mDataModel.getEmail().get());
+            UserDataStore dataStore = new UserDataStore(mContext);
+            dataStore.put(mDataModel.getEmail().get());
         }
 
         @Override
@@ -42,8 +43,8 @@ public class LoginViewModel {
 
     public LoginViewModel(Context context) {
         mContext = context;
-        PersistentDataStore dataStore = new PersistentDataStore(context);
-        String user = dataStore.getUser();
+        UserDataStore dataStore = new UserDataStore(context);
+        String user = dataStore.get();
         if (user != null) {
             mDataModel.setEmail(user);
         }
@@ -99,8 +100,8 @@ public class LoginViewModel {
         try {
             data = mDataModel.toJSON();
             if (data != null) {
-                PersistentDataStore dataStore = new PersistentDataStore(mContext);
-                final String url = dataStore.getServerUrl() + mContext.getString(R.string.url_login);
+                ServerUrlDataStore dataStore = new ServerUrlDataStore(mContext);
+                final String url = dataStore.get() + mContext.getString(R.string.url_login);
                 Log.i(TAG, "URL: " + url);
                 MyObjectRequest request = new MyObjectRequest(mContext, url, Request.Method.POST, mCallBack);
                 request.send(data);

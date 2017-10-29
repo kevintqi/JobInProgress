@@ -3,6 +3,8 @@ package com.sebeca.app.jobinprogress.network;
 import android.content.Context;
 import android.util.Log;
 
+import com.sebeca.app.jobinprogress.data.SessionCookieDataStore;
+
 import java.net.CookieManager;
 import java.net.CookieStore;
 import java.net.HttpCookie;
@@ -20,14 +22,14 @@ public class MyCookieStore implements CookieStore {
     private static final String TAG = MyCookieStore.class.getSimpleName();
     private Context mContext;
     private CookieStore mStore = (new CookieManager()).getCookieStore();
-    private PersistentDataStore mDataStore;
+    private SessionCookieDataStore mDataStore;
 
     public MyCookieStore(Context context) {
         // prevent context leaking by getting the application context
         mContext = context.getApplicationContext();
-        mDataStore = new PersistentDataStore(mContext);
+        mDataStore = new SessionCookieDataStore(mContext);
 
-        HttpCookie cookie = mDataStore.getSessionCookie();
+        HttpCookie cookie = mDataStore.get();
         if (cookie != null) {
             mStore.add(URI.create(cookie.getDomain()), cookie);
         }
@@ -40,7 +42,7 @@ public class MyCookieStore implements CookieStore {
             // if the cookie that the cookie store attempt to add is a session cookie,
             // we remove the older cookie and save the new one in shared preferences
             remove(URI.create(cookie.getDomain()), cookie);
-            mDataStore.putSessionCookie(cookie);
+            mDataStore.put(cookie);
         }
         mStore.add(URI.create(cookie.getDomain()), cookie);
     }

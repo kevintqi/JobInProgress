@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sebeca.app.jobinprogress.data.JobListDataStore;
 import com.sebeca.app.jobinprogress.databinding.FragmentJobListBinding;
 
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ public class JobListFragment extends Fragment{
 
     @Override
     public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        JobListDataStore dataStore = new JobListDataStore(getContext());
+        dataStore.get();
         mJobData.add(new Job("Line a"));
         mJobData.add(new Job("Line b"));
         mJobData.add(new Job("Line c"));

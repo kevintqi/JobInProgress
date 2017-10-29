@@ -2,7 +2,7 @@ package com.sebeca.app.jobinprogress.login;
 
 import android.content.Context;
 
-import com.sebeca.app.jobinprogress.network.PersistentDataStore;
+import com.sebeca.app.jobinprogress.data.ServerUrlDataStore;
 
 public class ServerViewModel {
     private Context mContext;
@@ -17,8 +17,8 @@ public class ServerViewModel {
     }
 
     public void onClickSet() {
-        PersistentDataStore dataStore = new PersistentDataStore(mContext);
-        dataStore.putServerUrl(mDataModel.getUrl().get());
+        ServerUrlDataStore dataStore = new ServerUrlDataStore(mContext);
+        dataStore.put(mDataModel.getUrl().get());
         FragmentSwitcher.back();
     }
 }

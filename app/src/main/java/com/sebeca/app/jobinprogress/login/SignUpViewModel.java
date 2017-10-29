@@ -7,8 +7,8 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.sebeca.app.jobinprogress.R;
+import com.sebeca.app.jobinprogress.data.ServerUrlDataStore;
 import com.sebeca.app.jobinprogress.network.MyObjectRequest;
-import com.sebeca.app.jobinprogress.network.PersistentDataStore;
 
 import org.json.JSONObject;
 
@@ -81,8 +81,8 @@ public class SignUpViewModel {
         try {
             JSONObject data = mDataModel.toJSON();
             if (data != null) {
-                PersistentDataStore dataStore = new PersistentDataStore(mContext);
-                final String url = dataStore.getServerUrl() + mContext.getString(R.string.url_sign_up);
+                ServerUrlDataStore dataStore = new ServerUrlDataStore(mContext);
+                final String url = dataStore.get() + mContext.getString(R.string.url_sign_up);
                 Log.i(TAG, "URL: " + url);
                 MyObjectRequest request = new MyObjectRequest(mContext, url, Request.Method.POST, mCallback);
                 request.send(data);
