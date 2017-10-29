@@ -21,7 +21,6 @@ public class MyRequestQueue {
     static MyRequestQueue mInstance;
     RequestQueue mRequestQueue;
     MyCookieStore myCookieStore;
-    String mServerUrl;
 
     private MyRequestQueue(Context context) {
         myCookieStore = new MyCookieStore(context);
@@ -30,7 +29,11 @@ public class MyRequestQueue {
         // Set up the network to use HttpURLConnection as the HTTP client.
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);
-        mServerUrl = context.getString(R.string.server_url);
+        PersistentDataStore dataStore = new PersistentDataStore(context);
+        if (dataStore.getServerUrl() == null) {
+            String serverUrl = context.getString(R.string.server_url);
+            dataStore.putServerUrl(serverUrl);
+        }
     }
 
     public static synchronized MyRequestQueue getInstance(Context context) {
@@ -55,13 +58,5 @@ public class MyRequestQueue {
 
     public boolean hasAuthenticated() {
         return false;
-    }
-
-    public String getServerUrl() {
-        return mServerUrl;
-    }
-
-    public void setServerUrl(String url) {
-        mServerUrl = url;
     }
 }

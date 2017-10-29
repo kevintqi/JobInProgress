@@ -7,7 +7,9 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.sebeca.app.jobinprogress.R;
 import com.sebeca.app.jobinprogress.network.MyArrayRequest;
+import com.sebeca.app.jobinprogress.network.PersistentDataStore;
 
 import org.json.JSONArray;
 
@@ -15,7 +17,6 @@ import org.json.JSONArray;
 public class LocationReporter {
     private static final String TAG = LocationReporter.class.getSimpleName();
 
-    private static final String URL = "https://www.sebeca.com/location";
     private static final int MSG_ID = 101;
     private static final int MSG_DELAY = 30000;
     private Context mContext;
@@ -58,9 +59,9 @@ public class LocationReporter {
     private JSONArray buildRequest(Object[] items) {
         if (items != null && items.length != 0) {
             JSONArray data = new JSONArray();
-            for (Object i : items) {
-                LocationData l = (LocationData) i;
-                data.put(l.toJSON());
+            for (Object it : items) {
+                LocationData locationData = (LocationData) it;
+                data.put(locationData.toJSON());
             }
             return data;
         } else {
@@ -70,7 +71,10 @@ public class LocationReporter {
     }
 
     private void sendRequest(JSONArray data) {
-        MyArrayRequest request = new MyArrayRequest(mContext, URL, Request.Method.POST, mCallback);
+        PersistentDataStore dataStore = new PersistentDataStore(mContext);
+        final String url = dataStore.getServerUrl() + mContext.getString(R.string.url_location);
+        Log.i(TAG, "URL: " + url);
+        MyArrayRequest request = new MyArrayRequest(mContext, url, Request.Method.POST, mCallback);
         request.send(data);
         Log.i(TAG, "sent: " + data.toString());
     }

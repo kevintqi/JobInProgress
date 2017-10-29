@@ -13,17 +13,13 @@ import com.sebeca.app.jobinprogress.network.MyRequestQueue;
  * A login activity for login and sign up
  */
 public class LoginActivity extends AppCompatActivity implements FragmentSwitcher.Container {
-    private Fragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        mFragment = new LoginFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.login_container, mFragment).commit();
         FragmentSwitcher.setContainer(this);
+        showInitialFragment();
     }
 
     @Override
@@ -49,6 +45,10 @@ public class LoginActivity extends AppCompatActivity implements FragmentSwitcher
         if (fm.getBackStackEntryCount() > 0) {
             fm.popBackStack();
         }
+    }
+
+    private void showInitialFragment() {
+        FragmentSwitcher.to(FragmentSwitcher.FRAGMENT_LOGIN, null);
     }
 }
 

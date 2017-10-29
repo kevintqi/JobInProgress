@@ -1,9 +1,7 @@
 package com.sebeca.app.jobinprogress.network;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-
-import com.google.gson.Gson;
+import android.util.Log;
 
 import java.net.CookieManager;
 import java.net.CookieStore;
@@ -19,48 +17,31 @@ import java.util.List;
  */
 
 public class MyCookieStore implements CookieStore {
-    /**
-     * The preferences name.
-     */
-    private final static String PREFS_NAME = MyCookieStore.class.getName();
-
-    /**
-     * The default preferences string.
-     */
-    private final static String KEY_NONE = "";
-
-    /**
-     * The preferences session cookie key.
-     */
-    private final static String KEY_SESSION_COOKIE = "session_cookie";
-
+    private static final String TAG = MyCookieStore.class.getSimpleName();
     private Context mContext;
-
     private CookieStore mStore = (new CookieManager()).getCookieStore();
+    private PersistentDataStore mDataStore;
 
     public MyCookieStore(Context context) {
         // prevent context leaking by getting the application context
         mContext = context.getApplicationContext();
+        mDataStore = new PersistentDataStore(mContext);
 
-        //if there is a cookie stored in shared preferences,
-        // we added it to the cookie store
-        String sessionCookie = getSavedSessionCookie();
-        if (!sessionCookie.equals(KEY_NONE)) {
-            Gson gson = new Gson();
-            HttpCookie cookie = gson.fromJson(sessionCookie, HttpCookie.class);
+        HttpCookie cookie = mDataStore.getSessionCookie();
+        if (cookie != null) {
             mStore.add(URI.create(cookie.getDomain()), cookie);
         }
     }
 
     @Override
     public void add(URI uri, HttpCookie cookie) {
+        Log.i(TAG, cookie.toString());
         if (cookie.getName().equals("sessionid")) {
             // if the cookie that the cookie store attempt to add is a session cookie,
             // we remove the older cookie and save the new one in shared preferences
             remove(URI.create(cookie.getDomain()), cookie);
-            saveSessionCookie(cookie);
+            mDataStore.putSessionCookie(cookie);
         }
-
         mStore.add(URI.create(cookie.getDomain()), cookie);
     }
 
@@ -87,26 +68,5 @@ public class MyCookieStore implements CookieStore {
     @Override
     public boolean removeAll() {
         return mStore.removeAll();
-    }
-
-    private String getSavedSessionCookie() {
-        return getPrefs().getString(KEY_SESSION_COOKIE, KEY_NONE);
-    }
-
-    /**
-     * Saves the HttpCookie to SharedPreferences as a json string.
-     *
-     * @param cookie The cookie to save in SharedPreferences.
-     */
-    private void saveSessionCookie(HttpCookie cookie) {
-        Gson gson = new Gson();
-        String jsonSessionCookieString = gson.toJson(cookie);
-        SharedPreferences.Editor editor = getPrefs().edit();
-        editor.putString(KEY_SESSION_COOKIE, jsonSessionCookieString);
-        editor.apply();
-    }
-
-    private SharedPreferences getPrefs() {
-        return mContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
 }
