@@ -29,9 +29,18 @@ public class LoginViewModel {
 
         @Override
         public void onSuccess(JSONObject response) {
-            mListener.onActionDone(true);
-            UserDataStore dataStore = new UserDataStore(mContext);
-            dataStore.put(mDataModel.getEmail().get());
+            try {
+                if (response.getString("status").equals("successful")) {
+                    mListener.onActionDone(true);
+                    UserDataStore dataStore = new UserDataStore(mContext);
+                    dataStore.put(mDataModel.getEmail().get());
+                    return;
+                }
+            } catch (JSONException e) {
+                Log.wtf(TAG, e);
+            }
+            mListener.onActionDone(false);
+            mListener.onPasswordError(mContext.getString(R.string.error_incorrect_password));
         }
 
         @Override
@@ -44,9 +53,8 @@ public class LoginViewModel {
     public LoginViewModel(Context context) {
         mContext = context;
         UserDataStore dataStore = new UserDataStore(context);
-        String user = dataStore.get();
-        if (user != null) {
-            mDataModel.setEmail(user);
+        if (dataStore.isAvailable()) {
+            mDataModel.setEmail(dataStore.get());
         }
     }
 

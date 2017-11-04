@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.sebeca.app.jobinprogress.R;
-import com.sebeca.app.jobinprogress.locator.LocationUpdater;
 
 import static com.sebeca.app.jobinprogress.main.SectionsPagerAdapter.SECTION_BREAK_TIMER;
 import static com.sebeca.app.jobinprogress.main.SectionsPagerAdapter.SECTION_JOB_LIST;
@@ -48,14 +47,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(this, LocationUpdater.class);
-        intent.putExtra(LocationUpdater.ACTION_KEY, LocationUpdater.ACTION_START);
+        Intent intent = new Intent(this, MainService.class);
+        intent.putExtra(MainService.ACTION_KEY, MainService.ACTION_START);
         startService(intent);
     }
 
     @Override
     protected void onStop() {
-        Intent intent = new Intent(this, LocationUpdater.class);
+        Intent intent = new Intent(this, MainService.class);
         stopService(intent);
         super.onStop();
     }

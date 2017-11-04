@@ -18,6 +18,7 @@ import java.net.CookiePolicy;
 
 
 public class MyRequestQueue {
+    public static final int CACHE_SIZE = 1024 * 1024;
     private static final String TAG = "SEBECA";
     static MyRequestQueue mInstance;
     RequestQueue mRequestQueue;
@@ -26,8 +27,7 @@ public class MyRequestQueue {
     private MyRequestQueue(Context context) {
         myCookieStore = new MyCookieStore(context);
         CookieHandler.setDefault(new CookieManager(myCookieStore, CookiePolicy.ACCEPT_ALL));
-        Cache cache = new DiskBasedCache(context.getApplicationContext().getCacheDir(), 1024 * 1024); // 1MB cap
-        // Set up the network to use HttpURLConnection as the HTTP client.
+        Cache cache = new DiskBasedCache(context.getApplicationContext().getCacheDir(), CACHE_SIZE);
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);
         ServerUrlDataStore dataStore = new ServerUrlDataStore(context);
@@ -57,7 +57,4 @@ public class MyRequestQueue {
         mRequestQueue.cancelAll(TAG);
     }
 
-    public boolean hasAuthenticated() {
-        return false;
-    }
 }

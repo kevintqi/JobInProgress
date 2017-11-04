@@ -64,10 +64,11 @@ public class LoginFragment extends ProgressFragment implements ViewModelListener
     @Override
     public void onActionDone(boolean success) {
         mBinding.loginButton.setEnabled(true);
-        showProgress(mBinding.loginProgress, mBinding.loginForm, false);
         if (success) {
             Intent intent = new Intent(getContext(), MainActivity.class);
             getContext().startActivity(intent);
+        } else {
+            showProgress(mBinding.loginProgress, mBinding.loginForm, false);
         }
     }
 }

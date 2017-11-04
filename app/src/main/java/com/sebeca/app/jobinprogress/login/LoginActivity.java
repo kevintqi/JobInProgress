@@ -1,11 +1,14 @@
 package com.sebeca.app.jobinprogress.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.sebeca.app.jobinprogress.R;
+import com.sebeca.app.jobinprogress.data.SessionCookieDataStore;
+import com.sebeca.app.jobinprogress.main.MainActivity;
 import com.sebeca.app.jobinprogress.network.MyRequestQueue;
 
 
@@ -48,7 +51,13 @@ public class LoginActivity extends AppCompatActivity implements FragmentSwitcher
     }
 
     private void showInitialFragment() {
-        FragmentSwitcher.to(FragmentSwitcher.FRAGMENT_LOGIN, null);
+        SessionCookieDataStore dataStore = new SessionCookieDataStore(this);
+        if (!dataStore.isAvailable()) {
+            FragmentSwitcher.to(FragmentSwitcher.FRAGMENT_LOGIN, null);
+        } else {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 }
 

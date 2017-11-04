@@ -28,7 +28,7 @@
         <activity android:name=".main.MainActivity"></activity>
 
         <service
-            android:name=".locator.LocationUpdater"
+            android:name=".main.MainService"
             android:exported="false"></service>
 
 

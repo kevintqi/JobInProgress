@@ -23,6 +23,10 @@ public class ServerUrlDataStore extends DataStore {
         save(KEY, serverUrl);
     }
 
+    public void clear() {
+        remove(KEY);
+    }
+
     public String get() {
         String data = get(KEY);
         if (data.equals(VALUE_NONE)) {

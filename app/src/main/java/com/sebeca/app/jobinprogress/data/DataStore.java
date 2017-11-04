@@ -22,6 +22,12 @@ class DataStore {
         return mSharedPreferences.getString(key, VALUE_NONE);
     }
 
+    void remove(String key) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.remove(key);
+        editor.apply();
+    }
+
     <T> void save(String key, T data) {
         Gson gson = new Gson();
         String jsonString = gson.toJson(data);

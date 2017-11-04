@@ -38,12 +38,10 @@ public class MyCookieStore implements CookieStore {
     @Override
     public void add(URI uri, HttpCookie cookie) {
         Log.i(TAG, cookie.toString());
-        if (cookie.getName().equals("sessionid")) {
-            // if the cookie that the cookie store attempt to add is a session cookie,
-            // we remove the older cookie and save the new one in shared preferences
-            remove(URI.create(cookie.getDomain()), cookie);
-            mDataStore.put(cookie);
-        }
+        Log.i(TAG, cookie.getName());
+        Log.i(TAG, cookie.getDomain());
+        remove(URI.create(cookie.getDomain()), cookie);
+        mDataStore.put(cookie);
         mStore.add(URI.create(cookie.getDomain()), cookie);
     }
 

@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.sebeca.app.jobinprogress.main.breaktime.BreakTimeFragment;
 import com.sebeca.app.jobinprogress.main.joblist.JobListFragment;
+import com.sebeca.app.jobinprogress.main.settings.SettingsFragment;
 
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -34,7 +35,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
             case SECTION_BREAK_TIMER:
                 return new BreakTimeFragment();
             case SECTION_SETTINGS:
-                return new JobListFragment();
+                return new SettingsFragment();
         }
         return new JobListFragment();
     }

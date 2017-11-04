@@ -25,6 +25,10 @@ public class SessionCookieDataStore extends DataStore {
         save(KEY, cookie);
     }
 
+    public void clear() {
+        remove(KEY);
+    }
+
     public HttpCookie get() {
         String data = get(KEY);
         if (data.equals(VALUE_NONE)) {

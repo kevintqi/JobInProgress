@@ -27,7 +27,7 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
     @Override
     public void onBindViewHolder(JobListAdapter.ViewHolder holder, int position) {
         Job job = mJobs.get(position);
-        holder.bindJob(job.getAddress());
+        holder.bindJob(job);
     }
 
     @Override
@@ -49,8 +49,8 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
 
         }
 
-        public void bindJob(String title) {
-            mTextView.setText(title);
+        public void bindJob(Job job) {
+            mTextView.setText(job.getAddress());
         }
     }
 

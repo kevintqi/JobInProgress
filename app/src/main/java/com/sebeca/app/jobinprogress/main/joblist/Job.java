@@ -1,68 +1,66 @@
 package com.sebeca.app.jobinprogress.main.joblist;
 
-import android.databinding.ObservableField;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public final class Job {
-    private final String mAddress;
-    private final ObservableField<String> mStatus = new ObservableField<>();
-    private final ObservableField<Integer> mIconId = new ObservableField<>();
-    private final ObservableField<Long> mTargetStartTime = new ObservableField<>();
-    private final ObservableField<Long> mTagetEndTime = new ObservableField<>();
-    private final ObservableField<Long> mActualStartTime = new ObservableField<>();
-    private ObservableField<Long> mActualEndTime = new ObservableField<>();
+    private static final String TAG = Job.class.getSimpleName();
+    private String mId;
+    private String mAddress;
+    private String mStatus;
+    private long mTargetStartTime;
+    private long mTargetEndTime;
+    private long mActualStartTime;
+    private long mActualEndTime;
 
-    public Job(String address) {
-        mAddress = address;
+    public Job(JSONObject job) {
+        try {
+            mId = job.getString("_id");
+            mStatus = job.getString("status");
+            JSONObject location = job.getJSONObject("location");
+            JSONObject address = location.getJSONObject("address");
+            mAddress = address.getString("street") + "\n" +
+                    address.getString("city") + "," +
+                    address.getString("state") + " " +
+                    address.getString("zipCode");
+            JSONObject schedule = job.getJSONObject("actualSchedule");
+            JSONObject time = schedule.getJSONObject("time");
+            mTargetStartTime = time.getLong("start");
+            mTargetEndTime = time.getLong("end");
+        } catch (JSONException e) {
+            Log.e(TAG, "", e);
+        }
+    }
+
+    public String getId() {
+        return mId;
     }
 
     public String getAddress() {return mAddress;}
 
-    public ObservableField<String> getStatus() {
+    public String getStatus() {
         return mStatus;
     }
 
-    public void setStatus(String status) {
-        mStatus.set(status);
+    public int getIconId() {
+        return 0;
     }
 
-    public ObservableField<Integer> getIconId() {
-        return mIconId;
-    }
-
-    public void setIconId(int iconId) {
-        mIconId.set(iconId);
-    }
-
-    public ObservableField<Long> getTargetStartTime() {
+    public long getTargetStartTime() {
         return mTargetStartTime;
     }
 
-    public void setTargetStartTime(long value) {
-        mTargetStartTime.set(value);
+    public long getTargetEndTime() {
+        return mTargetEndTime;
     }
 
-    public ObservableField<Long> getTagetEndTime() {
-        return mTagetEndTime;
-    }
-
-    public void setTagetEndTime(long value) {
-        mTagetEndTime.set(value);
-    }
-
-    public ObservableField<Long> getActualStartTime() {
+    public long getActualStartTime() {
         return mActualStartTime;
     }
 
-    public void setActualStartTime(long value) {
-        mActualStartTime.set(value);
-    }
-
-    public ObservableField<Long> getActualEndTime() {
+    public long getActualEndTime() {
         return mActualEndTime;
     }
-
-    public void setmActualEndTime(ObservableField<Long> mActualEndTime) {
-        this.mActualEndTime = mActualEndTime;
-    }
-
 }

@@ -9,18 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sebeca.app.jobinprogress.data.JobListDataStore;
 import com.sebeca.app.jobinprogress.databinding.FragmentJobListBinding;
-
-import java.util.ArrayList;
 
 
 public class JobListFragment extends Fragment{
-    private final ArrayList<Job> mJobData = new ArrayList<>();
     private FragmentJobListBinding mBinding;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
-    private JobListAdapter mJobListAdapter;
+    private JobListProvider mJobListProvider;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,18 +25,13 @@ public class JobListFragment extends Fragment{
         mRecyclerView = mBinding.recyclerView;
         mLinearLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mJobListAdapter = new JobListAdapter(mJobData);
-        mRecyclerView.setAdapter(mJobListAdapter);
+        mJobListProvider = new JobListProvider(this.getContext());
+        mRecyclerView.setAdapter(mJobListProvider.getJobListAdapter());
         return mBinding.getRoot();
     }
 
     @Override
     public void  onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        JobListDataStore dataStore = new JobListDataStore(getContext());
-        dataStore.get();
-        mJobData.add(new Job("Line a"));
-        mJobData.add(new Job("Line b"));
-        mJobData.add(new Job("Line c"));
-        mJobData.add(new Job("Line d"));
+        mJobListProvider.init();
     }
 }

@@ -1,28 +1,24 @@
 package com.sebeca.app.jobinprogress.locator;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.sebeca.app.jobinprogress.R;
 import com.sebeca.app.jobinprogress.data.ServerUrlDataStore;
+import com.sebeca.app.jobinprogress.main.ActionRepeater;
 import com.sebeca.app.jobinprogress.network.MyArrayRequest;
 
 import org.json.JSONArray;
 
-
-public class LocationReporter {
+public class LocationReporter extends ActionRepeater {
+    public static final int INTERVAL = 30000;
     private static final String TAG = LocationReporter.class.getSimpleName();
-
-    private static final int MSG_ID = 101;
-    private static final int MSG_DELAY = 30000;
+    private static final int ID = 111;
     private Context mContext;
-    private boolean mCancelled = false;
-    private Handler mHandler = new SenderHandler();
     private LocationDataQueue mLocationDataQueue;
+
     private MyArrayRequest.Callback mCallback = new MyArrayRequest.Callback() {
 
         @Override
@@ -34,25 +30,20 @@ public class LocationReporter {
         }
     };
 
-    LocationReporter(Context context, LocationDataQueue dataQueue) {
+    public LocationReporter(Context context, LocationDataQueue dataQueue) {
+        super(ID, INTERVAL);
         mContext = context;
         mLocationDataQueue = dataQueue;
     }
 
-    public synchronized void start() {
-        mCancelled = false;
-        mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_ID), MSG_DELAY);
-    }
-
-    public synchronized void cancel() {
-        mCancelled = true;
-    }
-
-    void reportData() {
-        Object[] items = mLocationDataQueue.popDataQueue();
-        JSONArray data = buildRequest(items);
-        if (data != null) {
-            sendRequest(data);
+    @Override
+    protected void action(int id) {
+        if (id == ID) {
+            Object[] items = mLocationDataQueue.popDataQueue();
+            JSONArray data = buildRequest(items);
+            if (data != null) {
+                sendRequest(data);
+            }
         }
     }
 
@@ -77,18 +68,5 @@ public class LocationReporter {
         MyArrayRequest request = new MyArrayRequest(mContext, url, Request.Method.POST, mCallback);
         request.send(data);
         Log.i(TAG, "sent: " + data.toString());
-    }
-
-    private class SenderHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            synchronized (LocationReporter.this) {
-                if (mCancelled) {
-                    return;
-                }
-                reportData();
-                sendMessageDelayed(obtainMessage(MSG_ID), MSG_DELAY);
-            }
-        }
     }
 }

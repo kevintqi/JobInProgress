@@ -23,6 +23,10 @@ public class UserDataStore extends DataStore {
         save(KEY, user);
     }
 
+    public void clear() {
+        remove(KEY);
+    }
+
     public String get() {
         String data = get(KEY);
         if (data.equals(VALUE_NONE)) {

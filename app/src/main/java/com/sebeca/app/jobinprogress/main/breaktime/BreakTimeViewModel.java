@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.sebeca.app.jobinprogress.R;
-import com.sebeca.app.jobinprogress.locator.LocationUpdater;
+import com.sebeca.app.jobinprogress.main.MainService;
 
 import java.util.Locale;
 
@@ -56,14 +56,14 @@ public class BreakTimeViewModel {
     }
 
     private void startLocationUpdater() {
-        Intent intent = new Intent(mContext, LocationUpdater.class);
-        intent.putExtra(LocationUpdater.ACTION_KEY, LocationUpdater.ACTION_START);
+        Intent intent = new Intent(mContext, MainService.class);
+        intent.putExtra(MainService.ACTION_KEY, MainService.ACTION_START);
         mContext.startService(intent);
     }
 
     private void stopLocationUpdater() {
-        Intent intent = new Intent(mContext, LocationUpdater.class);
-        intent.putExtra(LocationUpdater.ACTION_KEY, LocationUpdater.ACTION_STOP);
+        Intent intent = new Intent(mContext, MainService.class);
+        intent.putExtra(MainService.ACTION_KEY, MainService.ACTION_STOP);
         mContext.startService(intent);
     }
 
