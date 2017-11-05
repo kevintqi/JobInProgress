@@ -39,7 +39,7 @@ public class MyRequestQueue {
 
     public static synchronized MyRequestQueue getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new MyRequestQueue(context);
+            mInstance = new MyRequestQueue(context.getApplicationContext());
         }
         return mInstance;
     }

@@ -31,10 +31,8 @@ public class JobListRequester extends ActionRepeater {
         @Override
         public void onSuccess(JSONObject response) {
             try {
-                Log.i(TAG, response.toString());
                 JSONArray jobList = response.getJSONArray("jobs");
-                JobListDataStore dataStore = new JobListDataStore(mContext);
-                dataStore.put(jobList);
+                JobListDataStore.getInstance(mContext).put(jobList);
             } catch (JSONException e) {
                 Log.wtf(TAG, e);
             }

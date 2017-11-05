@@ -15,15 +15,17 @@ import java.util.ArrayList;
  */
 
 public class JobListProvider implements JobListDataStore.Callback {
+    private static final String TAG = JobListProvider.class.getSimpleName();
     private final ArrayList<Job> mJobData = new ArrayList<>();
-    JobListDataStore mJobListDataStore;
+    private final JobListDataStore mJobListDataStore;
     private Context mContext;
     private JobListAdapter mJobListAdapter;
 
     public JobListProvider(Context ctx) {
         mContext = ctx;
         mJobListAdapter = new JobListAdapter(mJobData);
-        mJobListDataStore = new JobListDataStore(mContext);
+        mJobListDataStore = JobListDataStore.getInstance(ctx);
+        mJobListDataStore.setCallback(this);
     }
 
     public JobListAdapter getJobListAdapter() {

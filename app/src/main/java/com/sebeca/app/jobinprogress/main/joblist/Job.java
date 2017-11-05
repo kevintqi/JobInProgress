@@ -10,8 +10,8 @@ public final class Job {
     private String mId;
     private String mAddress;
     private String mStatus;
-    private long mTargetStartTime;
-    private long mTargetEndTime;
+    private String mTargetStartTime;
+    private String mTargetEndTime;
     private long mActualStartTime;
     private long mActualEndTime;
 
@@ -27,8 +27,8 @@ public final class Job {
                     address.getString("zipCode");
             JSONObject schedule = job.getJSONObject("actualSchedule");
             JSONObject time = schedule.getJSONObject("time");
-            mTargetStartTime = time.getLong("start");
-            mTargetEndTime = time.getLong("end");
+            mTargetStartTime = time.getString("start");
+            mTargetEndTime = time.getString("end");
         } catch (JSONException e) {
             Log.e(TAG, "", e);
         }
@@ -48,11 +48,11 @@ public final class Job {
         return 0;
     }
 
-    public long getTargetStartTime() {
+    public String getTargetStartTime() {
         return mTargetStartTime;
     }
 
-    public long getTargetEndTime() {
+    public String getTargetEndTime() {
         return mTargetEndTime;
     }
 
