@@ -2,8 +2,6 @@ package com.sebeca.app.jobinprogress.data;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
-
 /**
  * Persistent Data Store for Login Name
  */
@@ -28,12 +26,6 @@ public class UserDataStore extends DataStore {
     }
 
     public String get() {
-        String data = get(KEY);
-        if (data.equals(VALUE_NONE)) {
-            return null;
-        } else {
-            Gson gson = new Gson();
-            return gson.fromJson(data, String.class);
-        }
+        return get(KEY);
     }
 }

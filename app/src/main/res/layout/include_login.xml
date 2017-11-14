@@ -25,7 +25,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="24dp"
             android:onClick="@{()->viewModel.onClickSwitchToUrlSetting()}"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_sebeca" />
 
         <!--  Name Label -->
         <android.support.design.widget.TextInputLayout

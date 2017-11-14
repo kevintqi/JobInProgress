@@ -22,7 +22,9 @@ public class SessionCookieDataStore extends DataStore {
     }
 
     public void put(HttpCookie cookie) {
-        save(KEY, cookie);
+        Gson gson = new Gson();
+        String data = gson.toJson(cookie);
+        save(KEY, data);
     }
 
     public void clear() {

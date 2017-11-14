@@ -7,9 +7,14 @@ import com.sebeca.app.jobinprogress.data.ServerUrlDataStore;
 public class ServerViewModel {
     private Context mContext;
     private ServerUrl mDataModel = new ServerUrl();
+    private ServerUrlDataStore mDataStore;
 
     public ServerViewModel(Context ctx) {
         mContext = ctx;
+        mDataStore = new ServerUrlDataStore(mContext);
+        if (mDataStore.isAvailable()) {
+            mDataModel.setUrl(mDataStore.get());
+        }
     }
 
     public ServerUrl getDataModel() {
@@ -17,8 +22,7 @@ public class ServerViewModel {
     }
 
     public void onClickSet() {
-        ServerUrlDataStore dataStore = new ServerUrlDataStore(mContext);
-        dataStore.put(mDataModel.getUrl().get());
+        mDataStore.put(mDataModel.getUrl().get());
         FragmentSwitcher.back();
     }
 }

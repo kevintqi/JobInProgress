@@ -7,26 +7,31 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LocationData {
-    private static final String TAG = LocationData.class.getSimpleName();
+    public static final String KEY_JOB_ID = "jobId";
+    public static final String KEY_LOCATION = "location";
     public static final String KEY_LAT = "lat";
     public static final String KEY_LNG = "lng";
-    public static final String KEY_TIME = "time";
+    public static final String KEY_TIME = "dateLog";
+    private static final String TAG = LocationData.class.getSimpleName();
+    private final String mJobId = "5986b8180a8ea07f61558999";
     private final double mLatitude;
-    private final double mAltitude;
+    private final double mLongitude;
     private final long mTime;
     private final JSONObject mJSONObject = new JSONObject();
 
-    public LocationData(Location location) {
+    public LocationData(String jobId, Location location) {
         mLatitude = location.getLatitude();
-        mAltitude = location.getAltitude();
+        mLongitude = location.getLongitude();
         mTime = location.getTime();
         try {
-            mJSONObject.put(KEY_LAT, mLatitude);
-            mJSONObject.put(KEY_LNG, mAltitude);
+            mJSONObject.put(KEY_JOB_ID, jobId);
+            JSONObject locationObj = new JSONObject();
+            locationObj.put(KEY_LAT, mLatitude);
+            locationObj.put(KEY_LNG, mLongitude);
+            mJSONObject.put(KEY_LOCATION, locationObj);
             mJSONObject.put(KEY_TIME, mTime);
         } catch (JSONException e) {
             Log.e(TAG, "", e);
-            e.printStackTrace();
         }
     }
 
@@ -34,8 +39,8 @@ public class LocationData {
         return mLatitude;
     }
 
-    double getAltitude() {
-            return mAltitude;
+    double getLongitude() {
+        return mLongitude;
     }
 
     long getTime() {

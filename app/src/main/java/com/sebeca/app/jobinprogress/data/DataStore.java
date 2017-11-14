@@ -3,8 +3,6 @@ package com.sebeca.app.jobinprogress.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
-
 class DataStore {
     static final String VALUE_NONE = "";
     private static final String TAG = DataStore.class.getName();
@@ -19,7 +17,7 @@ class DataStore {
     }
 
     String get(String key) {
-        return mSharedPreferences.getString(key, VALUE_NONE);
+        return mSharedPreferences.getString(key, VALUE_NONE).replaceAll("^\"|\"$", "");
     }
 
     void remove(String key) {
@@ -28,11 +26,9 @@ class DataStore {
         editor.apply();
     }
 
-    <T> void save(String key, T data) {
-        Gson gson = new Gson();
-        String jsonString = gson.toJson(data);
+    void save(String key, String data) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(key, jsonString);
+        editor.putString(key, data);
         editor.apply();
     }
 }

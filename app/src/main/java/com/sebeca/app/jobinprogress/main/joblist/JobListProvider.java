@@ -39,17 +39,17 @@ public class JobListProvider implements JobListDataStore.Callback {
 
     @Override
     public void onUpdate(JSONArray jobList) {
-        mJobData.clear();
-        try {
-            if (jobList != null) {
-                for (int i = 0; i < jobList.length(); ++i) {
+        if (jobList != null) {
+            mJobData.clear();
+            for (int i = 0; i < jobList.length(); ++i) {
+                try {
                     JSONObject jobInJson = jobList.getJSONObject(i);
                     mJobData.add(new Job(jobInJson));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+            mJobListAdapter.notifyDataSetChanged();
         }
-        mJobListAdapter.notifyDataSetChanged();
     }
 }

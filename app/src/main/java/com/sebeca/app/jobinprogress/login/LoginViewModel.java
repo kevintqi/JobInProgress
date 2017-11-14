@@ -30,7 +30,7 @@ public class LoginViewModel {
         @Override
         public void onSuccess(JSONObject response) {
             try {
-                if (response.getString("status").equals("successful")) {
+                if (response.getString("status").equals("success")) {
                     mListener.onActionDone(true);
                     UserDataStore dataStore = new UserDataStore(mContext);
                     dataStore.put(mDataModel.getEmail().get());

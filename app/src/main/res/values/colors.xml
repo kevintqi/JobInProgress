@@ -64,4 +64,5 @@
     <color name="edittext_background_color">#99808080</color>
     <!-- Network Details End -->
 
+    <color name="grayish">#122633</color>
 </resources>
