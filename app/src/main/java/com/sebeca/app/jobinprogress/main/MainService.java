@@ -19,6 +19,8 @@ public class MainService extends Service {
     public static final String ACTION_KEY = "ACTION";
     public static final int ACTION_START = 1;
     public static final int ACTION_STOP = 2;
+    public static final int ACTION_START_LOCATION_REPORT = 3;
+    public static final int ACTION_STOP_LOCATION_REPORT = 4;
 
     private static final String TAG = MainService.class.getSimpleName();
     private volatile Looper mServiceLooper;
@@ -62,8 +64,6 @@ public class MainService extends Service {
     }
 
     private void startAction() {
-        mLocationUpdater.start();
-        mLocationReporter.start(LocationReporter.INTERVAL);
         mJobListRequester.start(0);
     }
 
@@ -71,6 +71,16 @@ public class MainService extends Service {
         mLocationUpdater.stop();
         mLocationReporter.cancel();
         mJobListRequester.cancel();
+    }
+
+    private void startLocationReport() {
+        mLocationUpdater.start();
+        mLocationReporter.start(LocationReporter.INTERVAL);
+    }
+
+    private void stopLocationReport() {
+        mLocationUpdater.stop();
+        mLocationReporter.cancel();
     }
 
     private final class ServiceHandler extends Handler {
@@ -95,6 +105,14 @@ public class MainService extends Service {
                 case ACTION_STOP:
                     Log.i(TAG, "ACTION_STOP");
                     stopAction();
+                    break;
+                case ACTION_START_LOCATION_REPORT:
+                    Log.i(TAG, "ACTION_START_LOCATION_REPORT");
+                    startLocationReport();
+                    break;
+                case ACTION_STOP_LOCATION_REPORT:
+                    Log.i(TAG, "ACTION_STOP_LOCATION_REPORT");
+                    stopLocationReport();
                     break;
                 default:
                     break;

@@ -57,13 +57,13 @@ public class BreakTimeViewModel {
 
     private void startLocationUpdater() {
         Intent intent = new Intent(mContext, MainService.class);
-        intent.putExtra(MainService.ACTION_KEY, MainService.ACTION_START);
+        intent.putExtra(MainService.ACTION_KEY, MainService.ACTION_START_LOCATION_REPORT);
         mContext.startService(intent);
     }
 
     private void stopLocationUpdater() {
         Intent intent = new Intent(mContext, MainService.class);
-        intent.putExtra(MainService.ACTION_KEY, MainService.ACTION_STOP);
+        intent.putExtra(MainService.ACTION_KEY, MainService.ACTION_STOP_LOCATION_REPORT);
         mContext.startService(intent);
     }
 

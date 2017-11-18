@@ -38,8 +38,7 @@ public class ActiveJobDataStore extends DataStore {
     public String get() {
         String data = get(KEY);
         if (data.equals(VALUE_NONE)) {
-            //FIXME
-            return "59fe5f20874cb5e35a4fcfe1";
+            return null;
         } else {
             return data;
         }

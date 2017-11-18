@@ -1,5 +1,6 @@
 package com.sebeca.app.jobinprogress.main.joblist;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +16,18 @@ import java.util.ArrayList;
 
 
 public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHolder> {
+    private final Context mContext;
     private final ArrayList<Job> mJobs;
 
-    public JobListAdapter(ArrayList<Job> jobs) {
+    public JobListAdapter(Context context, ArrayList<Job> jobs) {
+        mContext = context;
         mJobs =jobs;
     }
 
     @Override
     public JobListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemJobListBinding binding = ItemJobListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new JobListAdapter.ViewHolder(binding.getRoot(), binding);
+        return new JobListAdapter.ViewHolder(mContext, binding.getRoot(), binding);
     }
 
     @Override
@@ -47,9 +50,9 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
         private JobListItemViewModel mViewModel;
 
 
-        public ViewHolder(View view, ItemJobListBinding binding) {
+        public ViewHolder(Context context, View view, ItemJobListBinding binding) {
             super(view);
-            mViewModel = new JobListItemViewModel(this);
+            mViewModel = new JobListItemViewModel(context, this);
             binding.setViewModel(mViewModel);
             mItemAddressText = binding.itemAddressText;
             mItemStatusIcon = binding.itemStatusIcon;
@@ -67,20 +70,30 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
             }
         }
 
+        @Override
+        public void onClickAction(Job job) {
+            updateStatus(job);
+        }
+
         public void bindJob(Job job) {
+            mViewModel.setJob(job);
             mItemAddressText.setText(job.getAddress());
-            String status = job.getStatus();
-            mItemStatusText.setText(status);
-            if (status.equalsIgnoreCase("New") || status.equalsIgnoreCase("Blocked")) {
+            updateStatus(job);
+        }
+
+        private void updateStatus(Job job) {
+            int status = job.getStatus();
+            mItemStatusText.setText(job.getStatusText());
+            if (status == Job.NEW || status == Job.BLOCKED) {
                 mItemStatusIcon.setImageResource(R.mipmap.block);
                 mItemActionButton.setText("Start");
-            } else if (status.equalsIgnoreCase("Starting") || status.equalsIgnoreCase("Progressing")) {
+            } else if (status == Job.PROGRESSING) {
                 mItemStatusIcon.setImageResource(R.mipmap.progress);
                 mItemActionButton.setText("Finishing");
-            } else if (status.equalsIgnoreCase("Finishing")) {
+            } else if (status == Job.FINISHING) {
                 mItemStatusIcon.setImageResource(R.mipmap.finishing);
                 mItemActionButton.setText("Done");
-            } else if (status.equalsIgnoreCase("Done")) {
+            } else if (status == Job.DONE) {
                 mItemStatusIcon.setImageResource(R.mipmap.check);
                 mItemActionButton.setText("Done");
                 mItemActionButton.setEnabled(false);
