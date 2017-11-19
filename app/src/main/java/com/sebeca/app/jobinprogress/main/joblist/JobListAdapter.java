@@ -17,11 +17,15 @@ import java.util.ArrayList;
 
 public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHolder> {
     private final Context mContext;
-    private final ArrayList<Job> mJobs;
+    private ArrayList<Job> mJobs = new ArrayList<>();
 
-    public JobListAdapter(Context context, ArrayList<Job> jobs) {
+    public JobListAdapter(Context context) {
         mContext = context;
-        mJobs =jobs;
+    }
+
+    public void setJobList(ArrayList<Job> jobs) {
+        mJobs = jobs;
+        notifyDataSetChanged();
     }
 
     @Override

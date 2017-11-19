@@ -2,6 +2,8 @@ package com.sebeca.app.jobinprogress.main.joblist;
 
 import android.util.Log;
 
+import com.sebeca.app.jobinprogress.database.JobEntity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,72 +14,75 @@ public final class Job {
     public static final int FINISHING = 2;
     public static final int DONE = 3;
     private static final String TAG = Job.class.getSimpleName();
-    private String mId;
-    private String mAddress;
     private String mStatusText;
-    private String mTargetStartTime;
-    private String mTargetEndTime;
-    private long mActualStartTime;
-    private long mActualEndTime;
-    private int mStatus = NEW;
-    private boolean mActive = false;
+    private JobEntity mJobEntity = new JobEntity();
 
-    public Job(JSONObject job) {
+    public Job(JSONObject job, int priority) {
         try {
-            mId = job.getString("_id");
+            mJobEntity.id = job.getString("_id");
+            mJobEntity.priority = priority;
             mStatusText = job.getString("status");
             mapStatus(mStatusText);
             JSONObject location = job.getJSONObject("location");
             JSONObject address = location.getJSONObject("address");
-            mAddress = address.getString("street") + "\n" +
+            mJobEntity.address = address.getString("street") + "\n" +
                     address.getString("city") + "," +
                     address.getString("state") + " " +
                     address.getString("zipCode");
             JSONObject schedule = job.getJSONObject("actualSchedule");
             JSONObject time = schedule.getJSONObject("time");
-            mTargetStartTime = time.getString("start");
-            mTargetEndTime = time.getString("end");
-            if (isDone()) {
-                mActive = true;
-            }
+            mJobEntity.targetStartTime = time.getString("start");
+            mJobEntity.targetEndTime = time.getString("end");
+            mJobEntity.active = isDone();
         } catch (JSONException e) {
             Log.e(TAG, "", e);
         }
     }
 
+    public Job(JobEntity jobEntity) {
+        mJobEntity = jobEntity;
+        updateStatus();
+    }
+
+    public JobEntity getJobEntity() {
+        return mJobEntity;
+    }
+
     public boolean isActive() {
-        return mActive;
+        return mJobEntity.active;
     }
 
     public void setActive(boolean active) {
-        mActive = active;
+        mJobEntity.active = active;
     }
 
     public boolean isDone() {
-        return mStatus == DONE;
+        return mJobEntity.status == DONE;
     }
 
     public void updateStatus() {
-        if (mStatus == BLOCKED || mStatus == NEW) {
-            mStatus = PROGRESSING;
+        if (mJobEntity.status == BLOCKED || mJobEntity.status == NEW) {
+            mJobEntity.status = PROGRESSING;
             mStatusText = "Progressing";
-        } else if (mStatus == PROGRESSING) {
-            mStatus = FINISHING;
+        } else if (mJobEntity.status == PROGRESSING) {
+            mJobEntity.status = FINISHING;
             mStatusText = "Finishing";
-        } else if (mStatus == FINISHING) {
-            mStatus = DONE;
+        } else if (mJobEntity.status == FINISHING) {
+            mJobEntity.status = DONE;
             mStatusText = "Done";
         }
     }
 
     public String getId() {
-        return mId;
+        return mJobEntity.id;
     }
 
-    public String getAddress() {return mAddress;}
+    public String getAddress() {
+        return mJobEntity.address;
+    }
 
     public int getStatus() {
-        return mStatus;
+        return mJobEntity.status;
     }
 
     public String getStatusText() {
@@ -89,32 +94,32 @@ public final class Job {
     }
 
     public String getTargetStartTime() {
-        return mTargetStartTime;
+        return mJobEntity.targetStartTime;
     }
 
     public String getTargetEndTime() {
-        return mTargetEndTime;
+        return mJobEntity.targetEndTime;
     }
 
     public long getActualStartTime() {
-        return mActualStartTime;
+        return mJobEntity.actualStartTime;
     }
 
     public long getActualEndTime() {
-        return mActualEndTime;
+        return mJobEntity.actualEndTime;
     }
 
     private void mapStatus(String status) {
         if (status.equalsIgnoreCase("New")) {
-            mStatus = NEW;
+            mJobEntity.status = NEW;
         } else if (status.equalsIgnoreCase("Starting") || status.equalsIgnoreCase("Progressing")) {
-            mStatus = PROGRESSING;
+            mJobEntity.status = PROGRESSING;
         } else if (status.equalsIgnoreCase("Finishing")) {
-            mStatus = FINISHING;
+            mJobEntity.status = FINISHING;
         } else if (status.equalsIgnoreCase("Done")) {
-            mStatus = DONE;
+            mJobEntity.status = DONE;
         } else if (status.equalsIgnoreCase("Blocked")) {
-            mStatus = BLOCKED;
+            mJobEntity.status = BLOCKED;
         }
     }
 }

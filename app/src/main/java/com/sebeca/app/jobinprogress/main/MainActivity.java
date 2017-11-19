@@ -1,6 +1,5 @@
 package com.sebeca.app.jobinprogress.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -25,25 +24,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.getTabAt(SECTION_JOB_LIST).setIcon(R.mipmap.ic_view_list);
         tabLayout.getTabAt(SECTION_BREAK_TIMER).setIcon(R.mipmap.ic_timer);
         tabLayout.getTabAt(SECTION_SETTINGS).setIcon(R.mipmap.ic_settings);
-
-        Intent intent = new Intent(this, MainService.class);
-        intent.putExtra(MainService.ACTION_KEY, MainService.ACTION_START);
-        startService(intent);
-    }
-
-    @Override
-    protected void onDestroy() {
-        Intent intent = new Intent(this, MainService.class);
-        stopService(intent);
-        super.onDestroy();
-
     }
 }

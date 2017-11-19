@@ -1,5 +1,6 @@
 package com.sebeca.app.jobinprogress.main.joblist;
 
+import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -12,7 +13,7 @@ import com.sebeca.app.jobinprogress.main.MainService;
  * Created by kevinqi on 11/5/17.
  */
 
-public class JobListItemViewModel {
+public class JobListItemViewModel extends ViewModel {
     private static final String TAG = JobListItemViewModel.class.getSimpleName();
     private Context mContext;
     private Listener mListener;

@@ -20,11 +20,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".main.MainActivity"></activity>
+        <activity android:name=".main.MainActivity" />
 
         <service
             android:name=".main.MainService"
-            android:exported="false"></service>
+            android:exported="false" />
 
 
     </application>
