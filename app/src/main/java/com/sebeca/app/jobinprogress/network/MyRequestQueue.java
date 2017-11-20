@@ -1,6 +1,6 @@
 package com.sebeca.app.jobinprogress.network;
 
-import android.content.Context;
+import android.app.Application;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;
@@ -18,37 +18,29 @@ import java.net.CookiePolicy;
 
 
 public class MyRequestQueue {
-    public static final int CACHE_SIZE = 1024 * 1024;
+    private static final int CACHE_SIZE = 1024 * 1024;
     private static final String TAG = "SEBECA";
-    static MyRequestQueue mInstance;
-    RequestQueue mRequestQueue;
-    MyCookieStore myCookieStore;
+    private RequestQueue mRequestQueue;
+    private MyCookieStore myCookieStore;
 
-    private MyRequestQueue(Context context) {
-        myCookieStore = new MyCookieStore(context);
+    public MyRequestQueue(Application app) {
+        myCookieStore = new MyCookieStore(app);
         CookieHandler.setDefault(new CookieManager(myCookieStore, CookiePolicy.ACCEPT_ALL));
-        Cache cache = new DiskBasedCache(context.getApplicationContext().getCacheDir(), CACHE_SIZE);
+        Cache cache = new DiskBasedCache(app.getCacheDir(), CACHE_SIZE);
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);
-        ServerUrlDataStore dataStore = new ServerUrlDataStore(context);
+        ServerUrlDataStore dataStore = new ServerUrlDataStore(app);
         if (!dataStore.isAvailable()) {
-            String serverUrl = context.getString(R.string.server_url);
+            String serverUrl = app.getString(R.string.server_url);
             dataStore.put(serverUrl);
         }
-    }
-
-    public static synchronized MyRequestQueue getInstance(Context context) {
-        if (mInstance == null) {
-            mInstance = new MyRequestQueue(context.getApplicationContext());
-        }
-        return mInstance;
     }
 
     public void start() {
         mRequestQueue.start();
     }
 
-    public <T> void addToQueue(Request<T> req) {
+    <T> void addToQueue(Request<T> req) {
         req.setTag(TAG);
         mRequestQueue.add(req);
     }

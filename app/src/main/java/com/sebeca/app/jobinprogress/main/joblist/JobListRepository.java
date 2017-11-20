@@ -1,5 +1,6 @@
 package com.sebeca.app.jobinprogress.main.joblist;
 
+import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
@@ -14,7 +15,7 @@ import com.android.volley.VolleyError;
 import com.sebeca.app.jobinprogress.R;
 import com.sebeca.app.jobinprogress.data.ServerUrlDataStore;
 import com.sebeca.app.jobinprogress.data.SessionCookieDataStore;
-import com.sebeca.app.jobinprogress.database.DatabaseFactory;
+import com.sebeca.app.jobinprogress.database.AppDatabase;
 import com.sebeca.app.jobinprogress.database.JobDao;
 import com.sebeca.app.jobinprogress.database.JobEntity;
 import com.sebeca.app.jobinprogress.login.LoginActivity;
@@ -27,7 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by kevinqi on 11/18/17.
+ * Job List Data Repository
  */
 
 public class JobListRepository {
@@ -60,15 +61,15 @@ public class JobListRepository {
         }
     };
 
-    public JobListRepository(Context context) {
-        mContext = context;
-        mJobDao = DatabaseFactory.get(context).jobDao();
+    public JobListRepository(Application application, AppDatabase database) {
+        mContext = application;
+        mJobDao = database.jobDao();
         HandlerThread thread = new HandlerThread(TAG);
         thread.start();
         mHandler = new Handler(thread.getLooper());
     }
 
-    public LiveData<ArrayList<Job>> getJobList() {
+    LiveData<ArrayList<Job>> getJobList() {
         requestJobList();
         mHandler.post(new LoadJobTask());
         return mJobList;

@@ -7,16 +7,20 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.sebeca.app.jobinprogress.di.App;
 
 import org.json.JSONObject;
+
+import javax.inject.Inject;
 
 /**
  * Wrapper for volley.toolbox.JsonObjectRequest - hopefully it is a bit easier to use
  */
 
 public class MyObjectRequest {
-
     private static final String TAG = MyObjectRequest.class.getSimpleName();
+    @Inject
+    MyRequestQueue mMyRequestQueue;
     private MyJsonObjectRequest mMyJsonObjectRequest;
     private Context mContext;
     private String mUrl;
@@ -24,6 +28,7 @@ public class MyObjectRequest {
     private Callback mCallback;
 
     public MyObjectRequest(Context context, String url, int method, Callback callback) {
+        ((App) context.getApplicationContext()).getAppComponent().inject(this);
         mContext = context;
         mUrl = url;
         mMethod = method;
@@ -46,7 +51,7 @@ public class MyObjectRequest {
                         mCallback.onError(error);
                     }
                 });
-        MyRequestQueue.getInstance(mContext).addToQueue(mMyJsonObjectRequest);
+        mMyRequestQueue.addToQueue(mMyJsonObjectRequest);
     }
 
     public interface Callback {
@@ -58,7 +63,7 @@ public class MyObjectRequest {
     private class MyJsonObjectRequest extends JsonObjectRequest {
         private NetworkResponse mResponse;
 
-        public MyJsonObjectRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        MyJsonObjectRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
             super(method, url, jsonRequest, listener, errorListener);
         }
 
@@ -69,7 +74,7 @@ public class MyObjectRequest {
             return super.parseNetworkResponse(response);
         }
 
-        public void showHeaders() {
+        void showHeaders() {
             if (mResponse.headers != null) {
                 for (String key : mResponse.headers.keySet()) {
                     Log.i(TAG, "" + key + ":" + mResponse.headers.get(key));

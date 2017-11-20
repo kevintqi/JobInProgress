@@ -24,8 +24,7 @@ public class MyCookieStore implements CookieStore {
     private CookieStore mStore = (new CookieManager()).getCookieStore();
     private SessionCookieDataStore mDataStore;
 
-    public MyCookieStore(Context context) {
-        // prevent context leaking by getting the application context
+    MyCookieStore(Context context) {
         mContext = context.getApplicationContext();
         mDataStore = new SessionCookieDataStore(mContext);
 

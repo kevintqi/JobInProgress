@@ -5,21 +5,27 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
+import com.sebeca.app.jobinprogress.di.App;
+
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 /**
- * Created by kevinqi on 11/18/17.
+ * Job List ViewModel
  */
 
 public class JobListViewModel extends AndroidViewModel {
-    private final JobListRepository mJobListRepository;
+
+    @Inject
+    JobListRepository mJobListRepository;
 
     public JobListViewModel(@NonNull Application app) {
         super(app);
-        mJobListRepository = new JobListRepository(app);
+        ((App) app).getAppComponent().inject(this);
     }
 
-    public LiveData<ArrayList<Job>> getJobList() {
+    LiveData<ArrayList<Job>> getJobList() {
         return mJobListRepository.getJobList();
     }
 }

@@ -8,18 +8,24 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.sebeca.app.jobinprogress.R;
 import com.sebeca.app.jobinprogress.data.SessionCookieDataStore;
+import com.sebeca.app.jobinprogress.di.App;
 import com.sebeca.app.jobinprogress.main.MainActivity;
 import com.sebeca.app.jobinprogress.network.MyRequestQueue;
+
+import javax.inject.Inject;
 
 
 /**
  * A login activity for login and sign up
  */
 public class LoginActivity extends AppCompatActivity implements FragmentSwitcher.Container {
+    @Inject
+    MyRequestQueue mMyRequestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((App) getApplication()).getAppComponent().inject(this);
         setContentView(R.layout.activity_login);
         FragmentSwitcher.setContainer(this);
         showInitialFragment();
@@ -28,7 +34,7 @@ public class LoginActivity extends AppCompatActivity implements FragmentSwitcher
     @Override
     protected void onStart() {
         super.onStart();
-        MyRequestQueue.getInstance(this).start();
+        mMyRequestQueue.start();
     }
 
     @Override
