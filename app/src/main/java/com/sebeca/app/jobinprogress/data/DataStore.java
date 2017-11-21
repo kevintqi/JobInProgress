@@ -3,13 +3,17 @@ package com.sebeca.app.jobinprogress.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-class DataStore {
-    static final String VALUE_NONE = "";
-    private static final String TAG = DataStore.class.getName();
-    private final SharedPreferences mSharedPreferences;
+import com.sebeca.app.jobinprogress.di.App;
 
-    DataStore(Context ctx) {
-        mSharedPreferences = ctx.getSharedPreferences(TAG, Context.MODE_PRIVATE);
+import javax.inject.Inject;
+
+public class DataStore {
+    static final String VALUE_NONE = "";
+    @Inject
+    SharedPreferences mSharedPreferences;
+
+    DataStore(Context context) {
+        ((App) context.getApplicationContext()).getAppComponent().inject(this);
     }
 
     boolean has(String key) {

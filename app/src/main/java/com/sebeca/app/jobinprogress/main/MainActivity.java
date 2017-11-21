@@ -1,5 +1,6 @@
 package com.sebeca.app.jobinprogress.main;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private MainViewModel mMainViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,5 +34,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(SECTION_JOB_LIST).setIcon(R.mipmap.ic_view_list);
         tabLayout.getTabAt(SECTION_BREAK_TIMER).setIcon(R.mipmap.ic_timer);
         tabLayout.getTabAt(SECTION_SETTINGS).setIcon(R.mipmap.ic_settings);
+
+        mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
     }
 }

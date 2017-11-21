@@ -3,6 +3,8 @@ package com.sebeca.app.jobinprogress.locator;
 import android.location.Location;
 import android.util.Log;
 
+import com.sebeca.app.jobinprogress.database.LocationEntity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,42 +14,56 @@ public class LocationData {
     public static final String KEY_LAT = "lat";
     public static final String KEY_LNG = "lng";
     public static final String KEY_TIME = "dateLog";
+
     private static final String TAG = LocationData.class.getSimpleName();
-    private final String mJobId = "5986b8180a8ea07f61558999";
-    private final double mLatitude;
-    private final double mLongitude;
-    private final long mTime;
     private final JSONObject mJSONObject = new JSONObject();
+    private final LocationEntity mLocationEntity;
 
     public LocationData(String jobId, Location location) {
-        mLatitude = location.getLatitude();
-        mLongitude = location.getLongitude();
-        mTime = location.getTime();
-        try {
-            mJSONObject.put(KEY_JOB_ID, jobId);
-            JSONObject locationObj = new JSONObject();
-            locationObj.put(KEY_LAT, mLatitude);
-            locationObj.put(KEY_LNG, mLongitude);
-            mJSONObject.put(KEY_LOCATION, locationObj);
-            mJSONObject.put(KEY_TIME, mTime);
-        } catch (JSONException e) {
-            Log.e(TAG, "", e);
-        }
+        mLocationEntity = new LocationEntity();
+        mLocationEntity.jobId = jobId;
+        mLocationEntity.latitude = location.getLatitude();
+        mLocationEntity.longitude = location.getLongitude();
+        mLocationEntity.reportTime = location.getTime();
+        mLocationEntity.archived = false;
+        buildJSON();
+    }
+
+    public LocationData(LocationEntity locationEntity) {
+        mLocationEntity = locationEntity;
+        buildJSON();
     }
 
     double getLatitude() {
-        return mLatitude;
+        return mLocationEntity.latitude;
     }
 
     double getLongitude() {
-        return mLongitude;
+        return mLocationEntity.longitude;
     }
 
     long getTime() {
-        return mTime;
+        return mLocationEntity.reportTime;
     }
 
     JSONObject toJSON() {
         return mJSONObject;
+    }
+
+    LocationEntity getLocationEntity() {
+        return mLocationEntity;
+    }
+
+    private void buildJSON() {
+        try {
+            mJSONObject.put(KEY_JOB_ID, mLocationEntity.jobId);
+            JSONObject locationObj = new JSONObject();
+            locationObj.put(KEY_LAT, mLocationEntity.latitude);
+            locationObj.put(KEY_LNG, mLocationEntity.longitude);
+            mJSONObject.put(KEY_LOCATION, locationObj);
+            mJSONObject.put(KEY_TIME, mLocationEntity.reportTime);
+        } catch (JSONException e) {
+            Log.e(TAG, "", e);
+        }
     }
 }

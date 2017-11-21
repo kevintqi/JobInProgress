@@ -2,8 +2,12 @@ package com.sebeca.app.jobinprogress.di;
 
 import android.app.Application;
 import android.arch.persistence.room.Room;
+import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.sebeca.app.jobinprogress.data.ActiveJobDataStore;
 import com.sebeca.app.jobinprogress.database.AppDatabase;
+import com.sebeca.app.jobinprogress.locator.LocationRepository;
 import com.sebeca.app.jobinprogress.main.joblist.JobListRepository;
 import com.sebeca.app.jobinprogress.network.MyRequestQueue;
 
@@ -19,6 +23,7 @@ import dagger.Provides;
 public class AppModule {
 
     private static final String APP_DATABASE_NAME = "app-database";
+    private static final String APP_SHARED_PREFERENCES = "app-shared-preference";
 
     private Application mApp;
 
@@ -34,19 +39,37 @@ public class AppModule {
 
     @Provides
     @Singleton
+    SharedPreferences providesSharedPreferences(Application app) {
+        return app.getSharedPreferences(APP_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+    }
+
+    @Provides
+    @Singleton
     AppDatabase providesAppDatabase(Application app) {
         return Room.databaseBuilder(app, AppDatabase.class, APP_DATABASE_NAME).build();
     }
 
     @Provides
     @Singleton
-    JobListRepository providesJobListRepository(Application application, AppDatabase database) {
-        return new JobListRepository(application, database);
+    MyRequestQueue providesMyRequestQueue(Application application) {
+        return new MyRequestQueue(application);
     }
 
     @Provides
     @Singleton
-    MyRequestQueue providesMyRequestQueue(Application application) {
-        return new MyRequestQueue(application);
+    LocationRepository providesLocationRepository(AppDatabase database, ActiveJobDataStore activeJobDataStore) {
+        return new LocationRepository(database, activeJobDataStore);
+    }
+
+    @Provides
+    @Singleton
+    JobListRepository providesJobListRepository(AppDatabase database) {
+        return new JobListRepository(database);
+    }
+
+    @Provides
+    @Singleton
+    ActiveJobDataStore providesActiveJobDataStore(Application application) {
+        return new ActiveJobDataStore(application);
     }
 }

@@ -10,18 +10,10 @@ import android.content.Context;
 public class ActiveJobDataStore extends DataStore {
     private static final String TAG = ActiveJobDataStore.class.getSimpleName();
     private static final String KEY = "active_job";
-    private static ActiveJobDataStore mInstance;
     private Callback mCallback;
 
-    private ActiveJobDataStore(Context ctx) {
+    public ActiveJobDataStore(Context ctx) {
         super(ctx);
-    }
-
-    public static synchronized ActiveJobDataStore getInstance(Context ctx) {
-        if (mInstance == null) {
-            mInstance = new ActiveJobDataStore(ctx.getApplicationContext());
-        }
-        return mInstance;
     }
 
     public void setCallback(Callback callback) {

@@ -13,15 +13,20 @@ import android.util.Log;
 
 import com.sebeca.app.jobinprogress.locator.LocationReporter;
 import com.sebeca.app.jobinprogress.locator.LocationUpdater;
+import com.sebeca.app.jobinprogress.main.joblist.JobListUpdater;
 
 public class MainService extends Service {
     public static final String ACTION_KEY = "ACTION";
-    public static final int ACTION_START_LOCATION_REPORT = 1;
-    public static final int ACTION_STOP_LOCATION_REPORT = 2;
+    public static final int ACTION_START = 1;
+    public static final int ACTION_STOP = 2;
+    public static final int ACTION_START_LOCATION_REPORT = 3;
+    public static final int ACTION_STOP_LOCATION_REPORT = 4;
+
 
     private static final String TAG = MainService.class.getSimpleName();
     private volatile Looper mServiceLooper;
     private volatile ServiceHandler mServiceHandler;
+    private JobListUpdater mJobListUpdater;
     private LocationReporter mLocationReporter;
     private LocationUpdater mLocationUpdater;
 
@@ -33,6 +38,7 @@ public class MainService extends Service {
         thread.start();
         mServiceLooper = thread.getLooper();
         mServiceHandler = new ServiceHandler();
+        mJobListUpdater = new JobListUpdater(this);
         mLocationReporter = new LocationReporter(this);
         mLocationUpdater = new LocationUpdater(this);
     }
@@ -48,7 +54,7 @@ public class MainService extends Service {
 
     @Override
     public void onDestroy() {
-        stopLocationReport();
+        stopAction();
         mServiceLooper.quit();
     }
 
@@ -56,6 +62,17 @@ public class MainService extends Service {
     @Nullable
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+
+    private void startAction() {
+        mJobListUpdater.start(0);
+    }
+
+    private void stopAction() {
+        mLocationUpdater.stop();
+        mLocationReporter.cancel();
+        mJobListUpdater.cancel();
     }
 
     private void startLocationReport() {
@@ -83,6 +100,14 @@ public class MainService extends Service {
             }
             int action = extra.getInt(ACTION_KEY);
             switch (action) {
+                case ACTION_START:
+                    Log.i(TAG, "ACTION_START");
+                    startAction();
+                    break;
+                case ACTION_STOP:
+                    Log.i(TAG, "ACTION_STOP");
+                    stopAction();
+                    break;
                 case ACTION_START_LOCATION_REPORT:
                     Log.i(TAG, "ACTION_START_LOCATION_REPORT");
                     startLocationReport();

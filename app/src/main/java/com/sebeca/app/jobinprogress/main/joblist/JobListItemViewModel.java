@@ -7,7 +7,10 @@ import android.util.Log;
 import android.view.View;
 
 import com.sebeca.app.jobinprogress.data.ActiveJobDataStore;
+import com.sebeca.app.jobinprogress.di.App;
 import com.sebeca.app.jobinprogress.main.MainService;
+
+import javax.inject.Inject;
 
 /**
  * Created by kevinqi on 11/5/17.
@@ -15,11 +18,14 @@ import com.sebeca.app.jobinprogress.main.MainService;
 
 public class JobListItemViewModel extends ViewModel {
     private static final String TAG = JobListItemViewModel.class.getSimpleName();
+    @Inject
+    ActiveJobDataStore mActiveJobDataStore;
     private Context mContext;
     private Listener mListener;
     private Job mJob;
 
     public JobListItemViewModel(Context context, Listener listener) {
+        ((App) context.getApplicationContext()).getAppComponent().inject(this);
         mContext = context;
         mListener = listener;
     }
@@ -36,7 +42,7 @@ public class JobListItemViewModel extends ViewModel {
 
     public void onClickAction(View v) {
         Log.i(TAG, "ActiveJobId: " + mJob.getId());
-        ActiveJobDataStore.getInstance(mContext).put(mJob.getId());
+        mActiveJobDataStore.put(mJob.getId());
         startService();
         mJob.updateStatus();
         mListener.onClickAction(mJob);

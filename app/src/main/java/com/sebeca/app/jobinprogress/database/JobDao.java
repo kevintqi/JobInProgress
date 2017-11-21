@@ -7,10 +7,6 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-/**
- * Created by kevinqi on 11/18/17.
- */
-
 @Dao
 public interface JobDao {
 
