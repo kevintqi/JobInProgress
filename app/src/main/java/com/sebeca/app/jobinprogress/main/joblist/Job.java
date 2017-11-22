@@ -33,7 +33,6 @@ public final class Job {
             JSONObject time = schedule.getJSONObject("time");
             mJobEntity.targetStartTime = time.getString("start");
             mJobEntity.targetEndTime = time.getString("end");
-            mJobEntity.active = isDone();
         } catch (JSONException e) {
             Log.e(TAG, "", e);
         }
@@ -41,33 +40,35 @@ public final class Job {
 
     public Job(JobEntity jobEntity) {
         mJobEntity = jobEntity;
-        updateStatus();
+        if (mJobEntity.status == NEW) {
+            mStatusText = "New";
+        } else if (mJobEntity.status == PROGRESSING) {
+            mStatusText = "Progressing";
+        } else if (mJobEntity.status == FINISHING) {
+            mStatusText = "Finishing";
+        } else if (mJobEntity.status == DONE) {
+            mStatusText = "Done";
+        } else if (mJobEntity.status == BLOCKED) {
+            mStatusText = "Blocked";
+        }
     }
 
     public JobEntity getJobEntity() {
         return mJobEntity;
     }
 
-    public boolean isActive() {
-        return mJobEntity.active;
-    }
-
-    public void setActive(boolean active) {
-        mJobEntity.active = active;
-    }
-
     public boolean isDone() {
         return mJobEntity.status == DONE;
     }
 
-    public void updateStatus() {
-        if (mJobEntity.status == BLOCKED || mJobEntity.status == NEW) {
+    public void updateStatus(int status) {
+        if (status == BLOCKED || status == NEW) {
             mJobEntity.status = PROGRESSING;
             mStatusText = "Progressing";
-        } else if (mJobEntity.status == PROGRESSING) {
+        } else if (status == PROGRESSING) {
             mJobEntity.status = FINISHING;
             mStatusText = "Finishing";
-        } else if (mJobEntity.status == FINISHING) {
+        } else if (status == FINISHING) {
             mJobEntity.status = DONE;
             mStatusText = "Done";
         }
@@ -107,6 +108,23 @@ public final class Job {
 
     public long getActualEndTime() {
         return mJobEntity.actualEndTime;
+    }
+
+    public JSONObject toJSON() {
+        try {
+            JSONObject data = new JSONObject();
+            data.put("status", mStatusText);
+            JSONObject schedule = new JSONObject();
+            JSONObject time = new JSONObject();
+            time.put("start", mJobEntity.actualStartTime);
+            time.put("end", mJobEntity.actualEndTime);
+            schedule.put("time", time);
+            data.put("actualSchedule", schedule);
+            return data;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private void mapStatus(String status) {

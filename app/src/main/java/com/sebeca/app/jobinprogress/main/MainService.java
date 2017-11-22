@@ -29,6 +29,8 @@ public class MainService extends Service {
     private JobListUpdater mJobListUpdater;
     private LocationReporter mLocationReporter;
     private LocationUpdater mLocationUpdater;
+    private Boolean mActionStarted = false;
+    private Boolean mActionLocationReportStarted = false;
 
     @Override
     public void onCreate() {
@@ -66,23 +68,39 @@ public class MainService extends Service {
 
 
     private void startAction() {
-        mJobListUpdater.start(0);
+        if (!mActionStarted) {
+            Log.i(TAG, "ACTION_START");
+            mJobListUpdater.start(0);
+            mActionStarted = true;
+        }
     }
 
     private void stopAction() {
-        mLocationUpdater.stop();
-        mLocationReporter.cancel();
-        mJobListUpdater.cancel();
+        if (mActionStarted) {
+            Log.i(TAG, "ACTION_STOP");
+            mLocationUpdater.stop();
+            mLocationReporter.cancel();
+            mJobListUpdater.cancel();
+            mActionStarted = false;
+        }
     }
 
     private void startLocationReport() {
-        mLocationUpdater.start();
-        mLocationReporter.start(LocationReporter.INTERVAL);
+        if (!mActionLocationReportStarted) {
+            Log.i(TAG, "ACTION_START_LOCATION_REPORT");
+            mLocationUpdater.start();
+            mLocationReporter.start(LocationReporter.INTERVAL);
+            mActionLocationReportStarted = true;
+        }
     }
 
     private void stopLocationReport() {
-        mLocationUpdater.stop();
-        mLocationReporter.cancel();
+        if (mActionLocationReportStarted) {
+            Log.i(TAG, "ACTION_STOP_LOCATION_REPORT");
+            mLocationUpdater.stop();
+            mLocationReporter.cancel();
+            mActionLocationReportStarted = false;
+        }
     }
 
     private final class ServiceHandler extends Handler {
@@ -101,19 +119,15 @@ public class MainService extends Service {
             int action = extra.getInt(ACTION_KEY);
             switch (action) {
                 case ACTION_START:
-                    Log.i(TAG, "ACTION_START");
                     startAction();
                     break;
                 case ACTION_STOP:
-                    Log.i(TAG, "ACTION_STOP");
                     stopAction();
                     break;
                 case ACTION_START_LOCATION_REPORT:
-                    Log.i(TAG, "ACTION_START_LOCATION_REPORT");
                     startLocationReport();
                     break;
                 case ACTION_STOP_LOCATION_REPORT:
-                    Log.i(TAG, "ACTION_STOP_LOCATION_REPORT");
                     stopLocationReport();
                     break;
                 default:

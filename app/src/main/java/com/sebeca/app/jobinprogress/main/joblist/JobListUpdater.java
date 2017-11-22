@@ -24,16 +24,16 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 /**
- * Created by kevinqi on 11/20/17.
+ * Request Job List from Cloud
  */
 
 public class JobListUpdater extends ActionRepeater {
     public static final int INTERVAL = 300000;
     private static final int ID = 101;
     private static final String TAG = JobListUpdater.class.getSimpleName();
+    private final Context mContext;
     @Inject
     JobListRepository mJobListRepository;
-    private Context mContext;
     private final MyObjectRequest.Callback mCallback = new MyObjectRequest.Callback() {
 
         @Override
@@ -58,7 +58,7 @@ public class JobListUpdater extends ActionRepeater {
     };
 
     public JobListUpdater(Context context) {
-        super(ID, 300000);
+        super(ID, INTERVAL);
         ((App) context.getApplicationContext()).getAppComponent().inject(this);
         mContext = context;
     }
@@ -78,14 +78,9 @@ public class JobListUpdater extends ActionRepeater {
     private void refreshJobList(JSONArray jobList) {
         if (jobList != null) {
             ArrayList<Job> jobs = new ArrayList<>();
-            boolean activeJobSet = false;
             for (int i = 0; i < jobList.length(); ++i) {
                 Job job = newJob(jobList, i);
                 if (job != null) {
-                    if (!activeJobSet && !job.isDone()) {
-                        job.setActive(true);
-                        activeJobSet = true;
-                    }
                     jobs.add(job);
                 }
             }

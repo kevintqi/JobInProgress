@@ -25,6 +25,4 @@ public class JobEntity {
     public long actualEndTime;
 
     public int status = Job.NEW;
-
-    public boolean active = false;
 }

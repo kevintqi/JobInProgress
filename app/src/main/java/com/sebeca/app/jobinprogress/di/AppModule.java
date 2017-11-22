@@ -63,8 +63,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    JobListRepository providesJobListRepository(AppDatabase database) {
-        return new JobListRepository(database);
+    JobListRepository providesJobListRepository(Application application, AppDatabase database, ActiveJobDataStore activeJobDataStore) {
+        return new JobListRepository(application, database, activeJobDataStore);
     }
 
     @Provides

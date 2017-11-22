@@ -88,6 +88,7 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
         private void updateStatus(Job job) {
             int status = job.getStatus();
             mItemStatusText.setText(job.getStatusText());
+            mItemActionButton.setEnabled(true);
             if (status == Job.NEW || status == Job.BLOCKED) {
                 mItemStatusIcon.setImageResource(R.mipmap.block);
                 mItemActionButton.setText("Start");

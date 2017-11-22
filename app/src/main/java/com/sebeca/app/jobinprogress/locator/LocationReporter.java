@@ -60,16 +60,18 @@ public class LocationReporter extends ActionRepeater implements LocationReposito
     @Override
     public void onLocationsReady(ArrayList<LocationData> locationData) {
         mLocationData = locationData;
-        JSONArray location = new JSONArray();
-        for (LocationData item : mLocationData) {
-            location.put(item.toJSON());
-        }
-        JSONObject data = new JSONObject();
-        try {
-            data.put(LOCATION_LOGS, location);
-            sendRequest(data);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (!mLocationData.isEmpty()) {
+            JSONArray location = new JSONArray();
+            for (LocationData item : mLocationData) {
+                location.put(item.toJSON());
+            }
+            JSONObject data = new JSONObject();
+            try {
+                data.put(LOCATION_LOGS, location);
+                sendRequest(data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
