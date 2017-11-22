@@ -17,19 +17,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/category_clothing"
+        android:id="@+id/jobListView"
         android:enabled="true"
         android:icon="@mipmap/ic_view_list"
         android:title="Job List"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/category_home"
+        android:id="@+id/breakTimeView"
         android:enabled="true"
         android:icon="@mipmap/ic_timer"
         android:title="Break Time"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/category_popsicles"
+        android:id="@+id/settingsView"
         android:enabled="true"
         android:icon="@mipmap/ic_settings"
         android:title="Settings"

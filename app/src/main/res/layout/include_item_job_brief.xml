@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.sebeca.app.jobinprogress.main.joblist.JobListItemViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_gravity="top"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:id="@+id/itemAddressText"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill_horizontal"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/itemStatusIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:contentDescription="Status"
+            android:src="@mipmap/block" />
+
+    </LinearLayout>
+
+</layout>

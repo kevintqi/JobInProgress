@@ -15,6 +15,7 @@ public final class Job {
     public static final int DONE = 3;
     private static final String TAG = Job.class.getSimpleName();
     private String mStatusText;
+    private String mStartTimeText;
     private JobEntity mJobEntity = new JobEntity();
 
     public Job(JSONObject job, int priority) {
@@ -26,13 +27,12 @@ public final class Job {
             JSONObject location = job.getJSONObject("location");
             JSONObject address = location.getJSONObject("address");
             mJobEntity.address = address.getString("street") + "\n" +
-                    address.getString("city") + "," +
+                    address.getString("city") + ", " +
                     address.getString("state") + " " +
                     address.getString("zipCode");
             JSONObject schedule = job.getJSONObject("actualSchedule");
             JSONObject time = schedule.getJSONObject("time");
-            mJobEntity.targetStartTime = time.getString("start");
-            mJobEntity.targetEndTime = time.getString("end");
+            mStartTimeText = time.getString("start");
         } catch (JSONException e) {
             Log.e(TAG, "", e);
         }
@@ -90,24 +90,16 @@ public final class Job {
         return mStatusText;
     }
 
-    public int getIconId() {
-        return 0;
+    public long getStartTime() {
+        return mJobEntity.startTime;
     }
 
-    public String getTargetStartTime() {
-        return mJobEntity.targetStartTime;
+    public void setStartTime(long startTime) {
+        mJobEntity.startTime = startTime;
     }
 
-    public String getTargetEndTime() {
-        return mJobEntity.targetEndTime;
-    }
-
-    public long getActualStartTime() {
-        return mJobEntity.actualStartTime;
-    }
-
-    public long getActualEndTime() {
-        return mJobEntity.actualEndTime;
+    public long getDuration() {
+        return mJobEntity.duration;
     }
 
     public JSONObject toJSON() {
@@ -116,8 +108,8 @@ public final class Job {
             data.put("status", mStatusText);
             JSONObject schedule = new JSONObject();
             JSONObject time = new JSONObject();
-            time.put("start", mJobEntity.actualStartTime);
-            time.put("end", mJobEntity.actualEndTime);
+            time.put("start", mJobEntity.startTime);
+            time.put("duration", mJobEntity.duration);
             schedule.put("time", time);
             data.put("actualSchedule", schedule);
             return data;

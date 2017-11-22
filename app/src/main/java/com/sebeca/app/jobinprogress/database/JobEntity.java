@@ -16,13 +16,9 @@ public class JobEntity {
 
     public String address;
 
-    public String targetStartTime;
+    public long startTime;
 
-    public String targetEndTime;
-
-    public long actualStartTime;
-
-    public long actualEndTime;
+    public int duration;
 
     public int status = Job.NEW;
 }

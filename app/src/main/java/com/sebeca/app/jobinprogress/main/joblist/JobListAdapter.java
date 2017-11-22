@@ -48,7 +48,6 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder implements JobListItemViewModel.Listener {
         private final TextView mItemAddressText;
         private final ImageView mItemStatusIcon;
-        private final TextView mItemStatusText;
         private final View mItemDetails;
         private final Button mItemActionButton;
         private JobListItemViewModel mViewModel;
@@ -58,11 +57,10 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
             super(view);
             mViewModel = new JobListItemViewModel(context, this);
             binding.setViewModel(mViewModel);
-            mItemAddressText = binding.itemAddressText;
-            mItemStatusIcon = binding.itemStatusIcon;
-            mItemStatusText = binding.itemStatusText;
+            mItemAddressText = binding.itemJobBrief.itemAddressText;
+            mItemStatusIcon = binding.itemJobBrief.itemStatusIcon;
             mItemDetails = binding.itemDetails;
-            mItemActionButton = binding.itmActionButton;
+            mItemActionButton = binding.itemJobAction.itmActionButton;
         }
 
         @Override
@@ -87,7 +85,6 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
 
         private void updateStatus(Job job) {
             int status = job.getStatus();
-            mItemStatusText.setText(job.getStatusText());
             mItemActionButton.setEnabled(true);
             if (status == Job.NEW || status == Job.BLOCKED) {
                 mItemStatusIcon.setImageResource(R.mipmap.block);

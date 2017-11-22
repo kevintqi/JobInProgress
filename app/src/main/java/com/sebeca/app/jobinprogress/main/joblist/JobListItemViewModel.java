@@ -47,6 +47,10 @@ public class JobListItemViewModel extends ViewModel {
     }
 
     private void updateJobStatus() {
+        int status = mJob.getStatus();
+        if (status == Job.NEW || status == Job.BLOCKED) {
+            mJob.setStartTime(System.currentTimeMillis());
+        }
         startLocationReport();
         mJob.updateStatus(mJob.getStatus());
         mJobListRepository.requestUpdateJob(mJob);
