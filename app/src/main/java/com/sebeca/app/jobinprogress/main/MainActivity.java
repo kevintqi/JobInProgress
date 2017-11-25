@@ -2,9 +2,13 @@ package com.sebeca.app.jobinprogress.main;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.sebeca.app.jobinprogress.R;
 
@@ -25,16 +29,36 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        final Toolbar appBar = findViewById(R.id.app_bar);
+        setSupportActionBar(appBar);
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
-        tabLayout.getTabAt(SECTION_JOB_LIST).setIcon(R.mipmap.ic_view_list);
-        tabLayout.getTabAt(SECTION_BREAK_TIMER).setIcon(R.mipmap.ic_timer);
-        tabLayout.getTabAt(SECTION_SETTINGS).setIcon(R.mipmap.ic_settings);
-
         mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) bottomNavigation.getLayoutParams();
+        layoutParams.setBehavior(new BottomNavigationViewBehavior());
+        bottomNavigation.setSelectedItemId(R.id.jobListView);
+        bottomNavigation.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        if (item.getItemId() == R.id.jobListView) {
+                            mViewPager.setCurrentItem(SECTION_JOB_LIST);
+                            appBar.setTitle(item.getTitle());
+                        }
+                        if (item.getItemId() == R.id.breakTimeView) {
+                            mViewPager.setCurrentItem(SECTION_BREAK_TIMER);
+                            appBar.setTitle(item.getTitle());
+                        }
+                        if (item.getItemId() == R.id.settingsView) {
+                            mViewPager.setCurrentItem(SECTION_SETTINGS);
+                            appBar.setTitle(item.getTitle());
+                        }
+                        return true;
+                    }
+                });
     }
 }

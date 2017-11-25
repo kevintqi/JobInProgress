@@ -15,10 +15,24 @@
         android:orientation="horizontal">
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/itemPauseButton"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@color/colorPrimary"
+            android:focusable="true"
+            android:onClick="@{()->viewModel.onClickBlock()}"
+            android:padding="15dp"
+            android:text="Block"
+            android:textColor="@color/white" />
+
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/itmActionButton"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
+            android:layout_marginLeft="50dp"
+            android:layout_marginStart="60dp"
             android:background="@drawable/blue_frame_rectangle"
             android:focusable="true"
             android:onClick="@{()->viewModel.onClickAction()}"
@@ -26,18 +40,6 @@
             android:text="Start"
             android:textColor="@color/white" />
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/itemPauseButton"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="50dp"
-            android:layout_marginStart="60dp"
-            android:background="@color/colorPrimary"
-            android:focusable="true"
-            android:onClick="@{()->viewModel.onClickAction()}"
-            android:padding="15dp"
-            android:text="Pause"
-            android:textColor="@color/white" />
+
     </LinearLayout>
 </layout>

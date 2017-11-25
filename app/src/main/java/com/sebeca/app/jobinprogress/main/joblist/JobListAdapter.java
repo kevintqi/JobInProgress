@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sebeca.app.jobinprogress.R;
 import com.sebeca.app.jobinprogress.databinding.ItemJobListBinding;
 
 import java.util.ArrayList;
@@ -46,12 +45,15 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements JobListItemViewModel.Listener {
+        private final JobListItemViewModel mViewModel;
         private final TextView mItemAddressText;
         private final ImageView mItemStatusIcon;
         private final View mItemDetails;
         private final Button mItemActionButton;
-        private JobListItemViewModel mViewModel;
-
+        private final Button mItemPauseButton;
+        private final TextView mItemStartTimeText;
+        private final TextView mItemDurationText;
+        private final View mItemJobAction;
 
         public ViewHolder(Context context, View view, ItemJobListBinding binding) {
             super(view);
@@ -60,7 +62,11 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
             mItemAddressText = binding.itemJobBrief.itemAddressText;
             mItemStatusIcon = binding.itemJobBrief.itemStatusIcon;
             mItemDetails = binding.itemDetails;
+            mItemJobAction = binding.itemJobAction.getRoot();
             mItemActionButton = binding.itemJobAction.itmActionButton;
+            mItemPauseButton = binding.itemJobAction.itemPauseButton;
+            mItemStartTimeText = binding.itemJobTime.itemStartTimeText;
+            mItemDurationText = binding.itemJobTime.itemDurationText;
         }
 
         @Override
@@ -73,7 +79,7 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
         }
 
         @Override
-        public void onClickAction(Job job) {
+        public void onUpdateJob(Job job) {
             updateStatus(job);
         }
 
@@ -84,21 +90,21 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
         }
 
         private void updateStatus(Job job) {
-            int status = job.getStatus();
             mItemActionButton.setEnabled(true);
-            if (status == Job.NEW || status == Job.BLOCKED) {
-                mItemStatusIcon.setImageResource(R.mipmap.block);
-                mItemActionButton.setText("Start");
-            } else if (status == Job.PROGRESSING) {
-                mItemStatusIcon.setImageResource(R.mipmap.progress);
-                mItemActionButton.setText("Finishing");
-            } else if (status == Job.FINISHING) {
-                mItemStatusIcon.setImageResource(R.mipmap.finishing);
-                mItemActionButton.setText("Done");
-            } else if (status == Job.DONE) {
-                mItemStatusIcon.setImageResource(R.mipmap.check);
-                mItemActionButton.setText("Done");
-                mItemActionButton.setEnabled(false);
+            mItemStatusIcon.setImageResource(job.getStatusIconId());
+            mItemStartTimeText.setText(job.getStartTimeText());
+            mItemDurationText.setText(job.getDurationText());
+            mItemActionButton.setText(job.getActionText());
+            mItemActionButton.setEnabled(true);
+            mItemPauseButton.setEnabled(true);
+            mItemJobAction.setVisibility(View.VISIBLE);
+            if (job.isNew()) {
+                mItemPauseButton.setEnabled(false);
+            } else if (job.isBlocked()) {
+                mItemPauseButton.setEnabled(false);
+                mItemDurationText.setText(job.getStatusText());
+            } else if (job.isDone()) {
+                mItemJobAction.setVisibility(View.GONE);
             }
         }
     }

@@ -2,20 +2,31 @@ package com.sebeca.app.jobinprogress.main.joblist;
 
 import android.util.Log;
 
+import com.sebeca.app.jobinprogress.R;
 import com.sebeca.app.jobinprogress.database.JobEntity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 public final class Job {
     public static final int BLOCKED = -1;
     public static final int NEW = 0;
     public static final int PROGRESSING = 1;
-    public static final int FINISHING = 2;
-    public static final int DONE = 3;
+    public static final int DONE = 2;
+
     private static final String TAG = Job.class.getSimpleName();
+    private static final int SECOND = 1000;
+    private static final int MINUTE = 60 * SECOND;
+    private static final int HOUR = 60 * MINUTE;
     private String mStatusText;
     private String mStartTimeText;
+    private int mStatusIconId;
+    private String mActionText;
+    private int mPreviousTotalDuration = 0;
+    private int mPreviousTotalBlockedDuration = 0;
     private JobEntity mJobEntity = new JobEntity();
 
     public Job(JSONObject job, int priority) {
@@ -23,7 +34,7 @@ public final class Job {
             mJobEntity.id = job.getString("_id");
             mJobEntity.priority = priority;
             mStatusText = job.getString("status");
-            mapStatus(mStatusText);
+            setStatus(toStatus(mStatusText));
             JSONObject location = job.getJSONObject("location");
             JSONObject address = location.getJSONObject("address");
             mJobEntity.address = address.getString("street") + "\n" +
@@ -40,38 +51,42 @@ public final class Job {
 
     public Job(JobEntity jobEntity) {
         mJobEntity = jobEntity;
-        if (mJobEntity.status == NEW) {
-            mStatusText = "New";
-        } else if (mJobEntity.status == PROGRESSING) {
-            mStatusText = "Progressing";
-        } else if (mJobEntity.status == FINISHING) {
-            mStatusText = "Finishing";
-        } else if (mJobEntity.status == DONE) {
-            mStatusText = "Done";
-        } else if (mJobEntity.status == BLOCKED) {
-            mStatusText = "Blocked";
+        mPreviousTotalDuration = jobEntity.totalDuration;
+        mPreviousTotalBlockedDuration = jobEntity.totalBlockedDuration;
+        setStatus(mJobEntity.status);
+        setStartTime(jobEntity.startTime);
+    }
+
+    private int toStatus(String statusText) {
+        int status = NEW;
+        if (statusText.equalsIgnoreCase("New")) {
+            status = NEW;
+        } else if (statusText.equalsIgnoreCase("Starting") ||
+                statusText.equalsIgnoreCase("Progressing") ||
+                statusText.equalsIgnoreCase("Finishing")) {
+            status = PROGRESSING;
+        } else if (statusText.equalsIgnoreCase("Done")) {
+            status = DONE;
+        } else if (statusText.equalsIgnoreCase("Blocked")) {
+            status = BLOCKED;
         }
+        return status;
     }
 
     public JobEntity getJobEntity() {
         return mJobEntity;
     }
 
+    public boolean isNew() {
+        return mJobEntity.status == NEW;
+    }
+
     public boolean isDone() {
         return mJobEntity.status == DONE;
     }
 
-    public void updateStatus(int status) {
-        if (status == BLOCKED || status == NEW) {
-            mJobEntity.status = PROGRESSING;
-            mStatusText = "Progressing";
-        } else if (status == PROGRESSING) {
-            mJobEntity.status = FINISHING;
-            mStatusText = "Finishing";
-        } else if (status == FINISHING) {
-            mJobEntity.status = DONE;
-            mStatusText = "Done";
-        }
+    public boolean isBlocked() {
+        return mJobEntity.status == BLOCKED;
     }
 
     public String getId() {
@@ -86,20 +101,69 @@ public final class Job {
         return mJobEntity.status;
     }
 
+    public void setStatus(int status) {
+        mJobEntity.status = status;
+        if (mJobEntity.status == NEW) {
+            mStatusText = "New";
+            mActionText = "Start";
+            mStatusIconId = R.mipmap.start;
+            mJobEntity.startTime = 0L;
+            mJobEntity.totalDuration = 0;
+            mJobEntity.totalBlockedDuration = 0;
+        } else if (mJobEntity.status == PROGRESSING) {
+            mStatusText = "Progressing";
+            mActionText = "Done";
+            mStatusIconId = R.mipmap.progress;
+        } else if (mJobEntity.status == DONE) {
+            mStatusText = "Done";
+            mActionText = "Done";
+            mStatusIconId = R.mipmap.check;
+        } else if (mJobEntity.status == BLOCKED) {
+            mStatusText = "Blocked";
+            mActionText = "Resume";
+            mStatusIconId = R.mipmap.block;
+        }
+    }
+
     public String getStatusText() {
         return mStatusText;
     }
 
-    public long getStartTime() {
-        return mJobEntity.startTime;
-    }
-
     public void setStartTime(long startTime) {
-        mJobEntity.startTime = startTime;
+        if (mJobEntity.startTime == 0L) {
+            mJobEntity.startTime = startTime;
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+        mStartTimeText = "Started:  " + dateFormat.format(mJobEntity.startTime);
     }
 
-    public long getDuration() {
-        return mJobEntity.duration;
+    public void setTotalDuration(int duration) {
+        mJobEntity.totalDuration = duration + mPreviousTotalDuration;
+    }
+
+    public void setTotalBlockedDuration(int duration) {
+        mJobEntity.totalBlockedDuration = duration + mPreviousTotalBlockedDuration;
+    }
+
+    public String getStartTimeText() {
+        return mStartTimeText;
+    }
+
+    public String getDurationText() {
+        int duration = mJobEntity.totalDuration - mJobEntity.totalBlockedDuration;
+        int hour = duration / HOUR;
+        int left = duration % HOUR;
+        int minutes = left / MINUTE;
+        int seconds = (left % MINUTE) / SECOND;
+        return String.format(Locale.ENGLISH, "%d:%02d:%02d", hour, minutes, seconds);
+    }
+
+    public String getActionText() {
+        return mActionText;
+    }
+
+    public int getStatusIconId() {
+        return mStatusIconId;
     }
 
     public JSONObject toJSON() {
@@ -109,9 +173,11 @@ public final class Job {
             JSONObject schedule = new JSONObject();
             JSONObject time = new JSONObject();
             time.put("start", mJobEntity.startTime);
-            time.put("duration", mJobEntity.duration);
+            time.put("totalDuration", mJobEntity.totalDuration);
+            time.put("totalBlocked", mJobEntity.totalBlockedDuration);
             schedule.put("time", time);
             data.put("actualSchedule", schedule);
+            data.put("lastUpdateTime", mJobEntity.lastUpdateTime);
             return data;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -119,17 +185,12 @@ public final class Job {
         }
     }
 
-    private void mapStatus(String status) {
-        if (status.equalsIgnoreCase("New")) {
-            mJobEntity.status = NEW;
-        } else if (status.equalsIgnoreCase("Starting") || status.equalsIgnoreCase("Progressing")) {
-            mJobEntity.status = PROGRESSING;
-        } else if (status.equalsIgnoreCase("Finishing")) {
-            mJobEntity.status = FINISHING;
-        } else if (status.equalsIgnoreCase("Done")) {
-            mJobEntity.status = DONE;
-        } else if (status.equalsIgnoreCase("Blocked")) {
-            mJobEntity.status = BLOCKED;
-        }
+    public String toString() {
+        return "[" + mJobEntity.priority + "]" +
+                mJobEntity.id + ":" + mStatusText +
+                "(" + mJobEntity.status + ")" +
+                "start=" + mJobEntity.startTime + "," +
+                "duration=" + mJobEntity.totalDuration + "," +
+                "blocked=" + mJobEntity.totalBlockedDuration;
     }
 }

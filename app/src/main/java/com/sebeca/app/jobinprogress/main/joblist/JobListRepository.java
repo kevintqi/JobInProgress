@@ -59,6 +59,7 @@ public class JobListRepository extends DataTaskRunner {
             JobEntity[] jobEntities = mJobDao.loadAllJobs();
             for (JobEntity jobEntity : jobEntities) {
                 Job job = new Job(jobEntity);
+                Log.i(TAG, "LoadJobListTask():" + job);
                 if (!activeJobSet && !job.isDone()) {
                     activeJobSet = true;
                     Log.i(TAG, "ActiveJobId: " + job.getId());
@@ -79,7 +80,7 @@ public class JobListRepository extends DataTaskRunner {
 
         @Override
         public void run() {
-            mJobDao.clearAllJobs();
+            //mJobDao.clearAllJobs();
             for (Job job : mJobList) {
                 mJobDao.insertJobs(job.getJobEntity());
             }
@@ -95,7 +96,10 @@ public class JobListRepository extends DataTaskRunner {
 
         @Override
         public void run() {
-            mJobDao.insertJobs(mJob.getJobEntity());
+            Log.i(TAG, "UpdateJobTask():" + mJob);
+            JobEntity jobEntity = mJob.getJobEntity();
+            jobEntity.lastUpdateTime = System.currentTimeMillis();
+            mJobDao.updateJobs(jobEntity);
         }
     }
 }

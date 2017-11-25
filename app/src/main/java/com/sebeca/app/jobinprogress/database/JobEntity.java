@@ -16,9 +16,13 @@ public class JobEntity {
 
     public String address;
 
-    public long startTime;
+    public long startTime = 0L;
 
-    public int duration;
+    public int totalDuration = 0;
+
+    public int totalBlockedDuration = 0;
 
     public int status = Job.NEW;
+
+    public long lastUpdateTime = 0L;
 }

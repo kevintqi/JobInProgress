@@ -12,8 +12,8 @@ import com.sebeca.app.jobinprogress.data.ServerUrlDataStore;
 import com.sebeca.app.jobinprogress.data.SessionCookieDataStore;
 import com.sebeca.app.jobinprogress.di.App;
 import com.sebeca.app.jobinprogress.login.LoginActivity;
-import com.sebeca.app.jobinprogress.main.ActionRepeater;
 import com.sebeca.app.jobinprogress.network.MyObjectRequest;
+import com.sebeca.app.jobinprogress.util.ActionRepeater;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +28,7 @@ import javax.inject.Inject;
  */
 
 public class JobListUpdater extends ActionRepeater {
-    public static final int INTERVAL = 300000;
+    private static final int INTERVAL = 300000;
     private static final int ID = 101;
     private static final String TAG = JobListUpdater.class.getSimpleName();
     private final Context mContext;

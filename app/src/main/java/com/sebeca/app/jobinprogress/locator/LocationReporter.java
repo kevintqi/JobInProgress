@@ -8,8 +8,8 @@ import com.android.volley.VolleyError;
 import com.sebeca.app.jobinprogress.R;
 import com.sebeca.app.jobinprogress.data.ServerUrlDataStore;
 import com.sebeca.app.jobinprogress.di.App;
-import com.sebeca.app.jobinprogress.main.ActionRepeater;
 import com.sebeca.app.jobinprogress.network.MyObjectRequest;
+import com.sebeca.app.jobinprogress.util.ActionRepeater;
 
 import org.json.JSONArray;
 import org.json.JSONException;

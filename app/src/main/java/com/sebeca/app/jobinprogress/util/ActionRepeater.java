@@ -1,4 +1,4 @@
-package com.sebeca.app.jobinprogress.main;
+package com.sebeca.app.jobinprogress.util;
 
 import android.os.Handler;
 import android.os.Message;

@@ -10,7 +10,7 @@ import android.arch.persistence.room.Update;
 @Dao
 public interface JobDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertJobs(JobEntity... jobs);
 
     @Update
