@@ -19,7 +19,7 @@ public class LocationUpdater {
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 30000;
     /**
      * The fastest rate for active location updates. Exact. Updates will never be more frequent
      * than this value.

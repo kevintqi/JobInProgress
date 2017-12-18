@@ -80,7 +80,7 @@ public class JobListRepository extends DataTaskRunner {
 
         @Override
         public void run() {
-            //mJobDao.clearAllJobs();
+            mJobDao.clearAllJobs();
             for (Job job : mJobList) {
                 mJobDao.insertJobs(job.getJobEntity());
             }

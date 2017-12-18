@@ -7,6 +7,7 @@ import com.sebeca.app.jobinprogress.login.LoginActivity;
 import com.sebeca.app.jobinprogress.main.joblist.JobListItemViewModel;
 import com.sebeca.app.jobinprogress.main.joblist.JobListUpdater;
 import com.sebeca.app.jobinprogress.main.joblist.JobListViewModel;
+import com.sebeca.app.jobinprogress.main.map.JobMapsViewModel;
 import com.sebeca.app.jobinprogress.network.MyObjectRequest;
 
 import javax.inject.Singleton;
@@ -30,6 +31,8 @@ public interface AppComponent {
     void inject(LocationUpdater locationUpdater);
 
     void inject(LocationReporter locationReporter);
+
+    void inject(JobMapsViewModel jobMapsViewModel);
 
     void inject(LoginActivity loginActivity);
 }

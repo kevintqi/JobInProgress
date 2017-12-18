@@ -19,4 +19,7 @@ public interface LocationDao {
 
     @Query("SELECT * FROM LocationEntity ORDER BY reportTime")
     LocationEntity[] loadAllLocations();
+
+    @Query("SELECT * FROM LocationEntity WHERE jobId=:jobId ORDER BY reportTime")
+    LocationEntity[] loadJobLocations(String jobId);
 }

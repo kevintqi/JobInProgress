@@ -14,6 +14,7 @@ import com.sebeca.app.jobinprogress.R;
 
 import static com.sebeca.app.jobinprogress.main.SectionsPagerAdapter.SECTION_BREAK_TIMER;
 import static com.sebeca.app.jobinprogress.main.SectionsPagerAdapter.SECTION_JOB_LIST;
+import static com.sebeca.app.jobinprogress.main.SectionsPagerAdapter.SECTION_MAPS;
 import static com.sebeca.app.jobinprogress.main.SectionsPagerAdapter.SECTION_SETTINGS;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         if (item.getItemId() == R.id.jobListView) {
                             mViewPager.setCurrentItem(SECTION_JOB_LIST);
+                            appBar.setTitle(item.getTitle());
+                        }
+                        if (item.getItemId() == R.id.jobMapsView) {
+                            mViewPager.setCurrentItem(SECTION_MAPS);
                             appBar.setTitle(item.getTitle());
                         }
                         if (item.getItemId() == R.id.breakTimeView) {

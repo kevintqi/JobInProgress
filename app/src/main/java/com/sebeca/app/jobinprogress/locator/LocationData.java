@@ -34,11 +34,11 @@ public class LocationData {
         buildJSON();
     }
 
-    double getLatitude() {
+    public double getLatitude() {
         return mLocationEntity.latitude;
     }
 
-    double getLongitude() {
+    public double getLongitude() {
         return mLocationEntity.longitude;
     }
 

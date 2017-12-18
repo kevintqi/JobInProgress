@@ -4,17 +4,20 @@ import android.app.Application;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 
 import com.sebeca.app.jobinprogress.data.ActiveJobDataStore;
 import com.sebeca.app.jobinprogress.di.App;
+import com.sebeca.app.jobinprogress.locator.LocationRepository;
 import com.sebeca.app.jobinprogress.main.MainService;
+import com.sebeca.app.jobinprogress.main.map.JobMarker;
+import com.sebeca.app.jobinprogress.main.map.JobMarkerRepository;
 import com.sebeca.app.jobinprogress.util.ElapsedTimer;
 
 import javax.inject.Inject;
 
 
 public class JobListItemViewModel extends ViewModel implements ElapsedTimer.Callback {
-
     private static final String TAG = JobListItemViewModel.class.getSimpleName();
     private static final int UPDATE_INTERVAL = 1000;
     private final Listener mListener;
@@ -25,6 +28,10 @@ public class JobListItemViewModel extends ViewModel implements ElapsedTimer.Call
     ActiveJobDataStore mActiveJobDataStore;
     @Inject
     JobListRepository mJobListRepository;
+    @Inject
+    JobMarkerRepository mJobMarkerRepository;
+    @Inject
+    LocationRepository mLocationRepository;
     private Job mJob;
     private ElapsedTimer.State mTimerState;
 
@@ -77,12 +84,22 @@ public class JobListItemViewModel extends ViewModel implements ElapsedTimer.Call
         }
         startLocationReport();
         mJobListRepository.requestUpdateJob(mJob);
+        addJobMarker();
     }
 
     private void startLocationReport() {
         Intent intent = new Intent(mApp, MainService.class);
         intent.putExtra(MainService.ACTION_KEY, MainService.ACTION_START_LOCATION_REPORT);
         mApp.startService(intent);
+    }
+
+    private void addJobMarker() {
+        JobMarker jobMarker = new JobMarker(mJob.getId(), mJob.getStatusText());
+        Location location = mLocationRepository.getLastLocation();
+        if (location != null) {
+            jobMarker.setLocation(location);
+            mJobMarkerRepository.addJobMarker(jobMarker);
+        }
     }
 
     public void onClickBlock() {

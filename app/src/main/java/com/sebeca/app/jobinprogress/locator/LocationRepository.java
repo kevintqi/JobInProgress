@@ -22,15 +22,19 @@ public class LocationRepository extends DataTaskRunner {
 
     private final ActiveJobDataStore mActiveJobDataStore;
     private final LocationDao mLocationDao;
+    private Location mLastLocation;
+
     private final LocationCallback mLocationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
+            if (locationResult != null) {
+                mLastLocation = locationResult.getLastLocation();
 
-            String activeJobId = mActiveJobDataStore.get();
-            Log.i(TAG, "activeJobId = " + activeJobId);
-            if (activeJobId != null) {
-                if (locationResult != null) {
+                String activeJobId = mActiveJobDataStore.get();
+                Log.i(TAG, "activeJobId = " + activeJobId);
+                if (activeJobId != null) {
+                    mLastLocation = locationResult.getLastLocation();
                     ArrayList<LocationData> locationData = new ArrayList<>();
                     Log.i(TAG, " LocationResult = " + locationResult.toString());
                     for (Location item : locationResult.getLocations()) {
@@ -38,10 +42,12 @@ public class LocationRepository extends DataTaskRunner {
                         locationData.add(data);
                     }
                     run(new InsertLocationsTask(locationData));
+                    run(new LoadJobLocationsTask(mActiveJobDataStore.get()));
                 }
             }
         }
     };
+    private LoadJobLocationsCallback mLoadJobLocationsCallback;
     private LoadLocationsCallback mLoadLocationsCallback;
 
     public LocationRepository(AppDatabase database, ActiveJobDataStore activeJobDataStore) {
@@ -54,6 +60,15 @@ public class LocationRepository extends DataTaskRunner {
         return mLocationCallback;
     }
 
+    public Location getLastLocation() {
+        return mLastLocation;
+    }
+
+    public void requestActiveJobLocations(LoadJobLocationsCallback callback) {
+        mLoadJobLocationsCallback = callback;
+        run(new LoadJobLocationsTask(mActiveJobDataStore.get()));
+    }
+
     void requestLocations(LoadLocationsCallback loadLocationsCallback) {
         mLoadLocationsCallback = loadLocationsCallback;
         run(new LoadLocationsTask());
@@ -63,7 +78,11 @@ public class LocationRepository extends DataTaskRunner {
         run(new ArchiveLocationsTask(locations));
     }
 
-    interface LoadLocationsCallback {
+    public interface LoadJobLocationsCallback {
+        void onLocationsReady(ArrayList<LocationData> locations);
+    }
+
+    public interface LoadLocationsCallback {
         void onLocationsReady(ArrayList<LocationData> locations);
     }
 
@@ -82,17 +101,40 @@ public class LocationRepository extends DataTaskRunner {
         }
     }
 
+    private class LoadJobLocationsTask implements Runnable {
+        private final String mJobId;
+
+        public LoadJobLocationsTask(String jobId) {
+            mJobId = jobId;
+        }
+
+        @Override
+        public void run() {
+            if (mLoadJobLocationsCallback != null) {
+                ArrayList<LocationData> locations = new ArrayList<>();
+                LocationEntity[] locationEntities = mLocationDao.loadJobLocations(mJobId);
+                for (LocationEntity item : locationEntities) {
+                    LocationData data = new LocationData(item);
+                    locations.add(data);
+                }
+                mLoadJobLocationsCallback.onLocationsReady(locations);
+            }
+        }
+    }
+
     private class LoadLocationsTask implements Runnable {
 
         @Override
         public void run() {
-            ArrayList<LocationData> locations = new ArrayList<>();
-            LocationEntity[] locationEntities = mLocationDao.loadNewLocations();
-            for (LocationEntity item : locationEntities) {
-                LocationData data = new LocationData(item);
-                locations.add(data);
+            if (mLoadLocationsCallback != null) {
+                ArrayList<LocationData> locations = new ArrayList<>();
+                LocationEntity[] locationEntities = mLocationDao.loadNewLocations();
+                for (LocationEntity item : locationEntities) {
+                    LocationData data = new LocationData(item);
+                    locations.add(data);
+                }
+                mLoadLocationsCallback.onLocationsReady(locations);
             }
-            mLoadLocationsCallback.onLocationsReady(locations);
         }
     }
 

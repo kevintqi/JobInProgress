@@ -9,6 +9,7 @@ import com.sebeca.app.jobinprogress.data.ActiveJobDataStore;
 import com.sebeca.app.jobinprogress.database.AppDatabase;
 import com.sebeca.app.jobinprogress.locator.LocationRepository;
 import com.sebeca.app.jobinprogress.main.joblist.JobListRepository;
+import com.sebeca.app.jobinprogress.main.map.JobMarkerRepository;
 import com.sebeca.app.jobinprogress.network.MyRequestQueue;
 
 import javax.inject.Singleton;
@@ -65,6 +66,12 @@ public class AppModule {
     @Singleton
     JobListRepository providesJobListRepository(Application application, AppDatabase database, ActiveJobDataStore activeJobDataStore) {
         return new JobListRepository(application, database, activeJobDataStore);
+    }
+
+    @Provides
+    @Singleton
+    JobMarkerRepository providesJobMarkerRepository(AppDatabase database) {
+        return new JobMarkerRepository(database);
     }
 
     @Provides

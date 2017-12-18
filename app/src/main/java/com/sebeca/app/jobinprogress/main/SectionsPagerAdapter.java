@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.sebeca.app.jobinprogress.main.breaktime.BreakTimeFragment;
 import com.sebeca.app.jobinprogress.main.joblist.JobListFragment;
+import com.sebeca.app.jobinprogress.main.map.JobMapsFragment;
 import com.sebeca.app.jobinprogress.main.settings.SettingsFragment;
 
 /**
@@ -19,9 +20,10 @@ import com.sebeca.app.jobinprogress.main.settings.SettingsFragment;
  */
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     public static final int SECTION_JOB_LIST = 0;
-    public static final int SECTION_BREAK_TIMER = 1;
-    public static final int SECTION_SETTINGS = 2;
-    public static final int SECTION_TOTAL = 3;
+    public static final int SECTION_MAPS = 1;
+    public static final int SECTION_BREAK_TIMER = 2;
+    public static final int SECTION_SETTINGS = 3;
+    public static final int SECTION_TOTAL = 4;
 
     public SectionsPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -32,6 +34,8 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         switch (position) {
             case SECTION_JOB_LIST:
                 return new JobListFragment();
+            case SECTION_MAPS:
+                return new JobMapsFragment();
             case SECTION_BREAK_TIMER:
                 return new BreakTimeFragment();
             case SECTION_SETTINGS:
