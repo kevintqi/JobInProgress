@@ -94,10 +94,9 @@ public class JobListItemViewModel extends ViewModel implements ElapsedTimer.Call
     }
 
     private void addJobMarker() {
-        JobMarker jobMarker = new JobMarker(mJob.getId(), mJob.getStatusText());
         Location location = mLocationRepository.getLastLocation();
         if (location != null) {
-            jobMarker.setLocation(location);
+            JobMarker jobMarker = new JobMarker(mJob.getId(), mJob.getStatusText(), location);
             mJobMarkerRepository.addJobMarker(jobMarker);
         }
     }

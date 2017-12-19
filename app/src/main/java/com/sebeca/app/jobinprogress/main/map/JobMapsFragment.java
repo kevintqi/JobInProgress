@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +28,8 @@ import com.sebeca.app.jobinprogress.locator.LocationData;
 import java.util.ArrayList;
 
 /**
- * Created by kevinqi on 11/26/17.
+ * Map View of a Job
  */
-
 public class JobMapsFragment extends Fragment implements OnMapReadyCallback {
     private static final String TAG = JobMapsFragment.class.getSimpleName();
     private SupportMapFragment mMapView;
@@ -40,7 +38,7 @@ public class JobMapsFragment extends Fragment implements OnMapReadyCallback {
     private ArrayList<LocationData> mLocationData;
     private Polyline mPolyline;
     private ArrayList<JobMarker> mJobMarkers;
-    private ArrayList<Marker> mMarker = new ArrayList<>();
+    private final ArrayList<Marker> mMarker = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -117,7 +115,7 @@ public class JobMapsFragment extends Fragment implements OnMapReadyCallback {
                 lastJobMarker = jobMarker;
             }
             if (lastJobMarker != null) {
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastJobMarker.getJobLocation(), (float) 15.0));
+                focusOn(lastJobMarker.getJobLocation());
             }
         }
     }
@@ -132,12 +130,18 @@ public class JobMapsFragment extends Fragment implements OnMapReadyCallback {
             polylineOptions.width(5);
             polylineOptions.clickable(true);
             LatLng location = null;
-            Log.i("KQ", "numLocations=" + mLocationData.size());
             for (LocationData item : mLocationData) {
                 location = new LatLng(item.getLatitude(), item.getLongitude());
                 polylineOptions.add(location);
             }
             mPolyline = mMap.addPolyline(polylineOptions);
+            if (location != null) {
+                focusOn(location);
+            }
         }
+    }
+
+    private void focusOn(LatLng location) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, (float) 15.0));
     }
 }

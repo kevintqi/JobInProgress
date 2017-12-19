@@ -15,19 +15,18 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-/**
- * Created by kevinqi on 12/2/17.
- */
 
 public class JobMapsViewModel extends AndroidViewModel implements LocationRepository.LoadJobLocationsCallback {
-
-    private final MutableLiveData<ArrayList<LocationData>> mLocationData = new MutableLiveData<>();
     @Inject
     LocationRepository mLocationRepository;
+
     @Inject
     JobMarkerRepository mJobMarkerRepository;
+
     @Inject
     ActiveJobDataStore mActiveJobDataStore;
+
+    private final MutableLiveData<ArrayList<LocationData>> mLocationData = new MutableLiveData<>();
 
     public JobMapsViewModel(@NonNull Application app) {
         super(app);
