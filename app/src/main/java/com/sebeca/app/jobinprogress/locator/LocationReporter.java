@@ -53,7 +53,7 @@ public class LocationReporter extends ActionRepeater implements LocationReposito
     @Override
     protected void action(int id) {
         if (id == ID) {
-            mLocationRepository.requestLocations(this);
+            mLocationRepository.requestNewLocations(this);
         }
     }
 

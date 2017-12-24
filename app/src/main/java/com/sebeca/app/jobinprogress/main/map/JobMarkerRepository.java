@@ -23,26 +23,20 @@ public class JobMarkerRepository extends DataTaskRunner {
         mJobMarkerDao = database.jobMarkerDao();
     }
 
-    public LiveData<ArrayList<JobMarker>> getJobMakers(String jobId) {
-        run(new LoadJobMarkersTask(jobId));
+    public LiveData<ArrayList<JobMarker>> getJobMakers() {
+        run(new LoadJobMarkersTask());
         return mJobMakers;
     }
 
     public void addJobMarker(JobMarker jobMarker) {
         run(new InsertJobMarkersTask(jobMarker));
-        run(new LoadJobMarkersTask(jobMarker.getJobId()));
+        run(new LoadJobMarkersTask());
     }
 
     private class LoadJobMarkersTask implements Runnable {
-        private final String mJobId;
-
-        LoadJobMarkersTask(String jobId) {
-            mJobId = jobId;
-        }
-
         @Override
         public void run() {
-            JobMarkerEntity[] jobMarkerEntities = mJobMarkerDao.loadJobMakers(mJobId);
+            JobMarkerEntity[] jobMarkerEntities = mJobMarkerDao.loadJobMarkers();
             ArrayList<JobMarker> jobMarkers = new ArrayList<>();
             for (JobMarkerEntity item : jobMarkerEntities) {
                 jobMarkers.add(new JobMarker(item));

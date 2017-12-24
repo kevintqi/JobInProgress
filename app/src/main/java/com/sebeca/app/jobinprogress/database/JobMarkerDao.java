@@ -15,6 +15,6 @@ public interface JobMarkerDao {
     @Query("DELETE FROM JobMarkerEntity")
     void clearJobMarkers();
 
-    @Query("SELECT * FROM JobMarkerEntity WHERE jobId=:jobId ORDER BY updateTime")
-    JobMarkerEntity[] loadJobMakers(String jobId);
+    @Query("SELECT * FROM JobMarkerEntity ORDER BY jobId")
+    JobMarkerEntity[] loadJobMarkers();
 }

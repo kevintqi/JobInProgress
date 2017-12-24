@@ -19,7 +19,7 @@ public class LocationData {
     private final JSONObject mJSONObject = new JSONObject();
     private final LocationEntity mLocationEntity;
 
-    public LocationData(String jobId, Location location) {
+    LocationData(String jobId, Location location) {
         mLocationEntity = new LocationEntity();
         mLocationEntity.jobId = jobId;
         mLocationEntity.latitude = location.getLatitude();
@@ -29,7 +29,7 @@ public class LocationData {
         buildJSON();
     }
 
-    public LocationData(LocationEntity locationEntity) {
+    LocationData(LocationEntity locationEntity) {
         mLocationEntity = locationEntity;
         buildJSON();
     }
@@ -40,6 +40,10 @@ public class LocationData {
 
     public double getLongitude() {
         return mLocationEntity.longitude;
+    }
+
+    public String getJobId() {
+        return mLocationEntity.jobId;
     }
 
     long getTime() {

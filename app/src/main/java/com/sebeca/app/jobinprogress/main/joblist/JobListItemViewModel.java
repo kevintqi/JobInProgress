@@ -18,10 +18,6 @@ import javax.inject.Inject;
 
 
 public class JobListItemViewModel extends ViewModel implements ElapsedTimer.Callback {
-    private static final String TAG = JobListItemViewModel.class.getSimpleName();
-    private static final int UPDATE_INTERVAL = 1000;
-    private final Listener mListener;
-    private final ElapsedTimer mElapsedTimer;
     @Inject
     Application mApp;
     @Inject
@@ -32,6 +28,11 @@ public class JobListItemViewModel extends ViewModel implements ElapsedTimer.Call
     JobMarkerRepository mJobMarkerRepository;
     @Inject
     LocationRepository mLocationRepository;
+
+    private static final String TAG = JobListItemViewModel.class.getSimpleName();
+    private static final int UPDATE_INTERVAL = 1000;
+    private final Listener mListener;
+    private final ElapsedTimer mElapsedTimer;
     private Job mJob;
     private ElapsedTimer.State mTimerState;
 
@@ -105,6 +106,7 @@ public class JobListItemViewModel extends ViewModel implements ElapsedTimer.Call
         mJob.setStatus(Job.BLOCKED);
         mElapsedTimer.pause();
         mJobListRepository.requestUpdateJob(mJob);
+        addJobMarker();
         mListener.onUpdateJob(mJob);
     }
 
