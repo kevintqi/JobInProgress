@@ -10,7 +10,7 @@ public class JobMarker {
     private final JobMarkerEntity mJobMarkerEntity;
     private final LatLng mLocation;
 
-    public JobMarker(String jobId, String jobState, Location location) {
+    public JobMarker(String jobId, int jobState, Location location) {
         mJobMarkerEntity = new JobMarkerEntity();
         mJobMarkerEntity.jobId = jobId;
         mJobMarkerEntity.jobState = jobState;
@@ -33,7 +33,7 @@ public class JobMarker {
         return mJobMarkerEntity.jobId;
     }
 
-    public String getJobState() {
+    public int getJobState() {
         return mJobMarkerEntity.jobState;
     }
 

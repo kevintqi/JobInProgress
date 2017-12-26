@@ -10,7 +10,7 @@ import com.sebeca.app.jobinprogress.main.joblist.Job;
 public class JobEntity {
     @PrimaryKey
     @NonNull
-    public String id;
+    public String id = "";
 
     public int priority;
 

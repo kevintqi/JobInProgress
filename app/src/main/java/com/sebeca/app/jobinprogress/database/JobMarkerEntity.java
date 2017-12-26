@@ -10,7 +10,7 @@ public class JobMarkerEntity {
     @PrimaryKey
     public String jobId = "";
 
-    public String jobState;
+    public int jobState;
 
     public long updateTime;
 

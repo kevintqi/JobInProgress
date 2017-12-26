@@ -17,12 +17,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.sebeca.app.jobinprogress.R;
 import com.sebeca.app.jobinprogress.locator.LocationData;
+import com.sebeca.app.jobinprogress.main.joblist.Job;
 
 import java.util.ArrayList;
 
@@ -119,10 +121,7 @@ public class JobMapsFragment extends Fragment implements OnMapReadyCallback {
             mMarker.clear();
             JobMarker lastJobMarker = null;
             for (JobMarker jobMarker : mJobMarkers) {
-                MarkerOptions options = new MarkerOptions();
-                options.position(jobMarker.getJobLocation());
-                options.title(jobMarker.getJobId());
-                Marker marker = mMap.addMarker(options);
+                Marker marker = newMarker(jobMarker);
                 mMarker.add(marker);
                 lastJobMarker = jobMarker;
             }
@@ -130,6 +129,19 @@ public class JobMapsFragment extends Fragment implements OnMapReadyCallback {
                 focusOn(lastJobMarker.getJobLocation());
             }
         }
+    }
+
+    private Marker newMarker(JobMarker jobMarker) {
+        MarkerOptions options = new MarkerOptions();
+        options.position(jobMarker.getJobLocation());
+        if (jobMarker.getJobState() == Job.DONE) {
+            options.icon(BitmapDescriptorFactory.fromResource(R.mipmap.check));
+        } else if (jobMarker.getJobState() == Job.PROGRESSING) {
+            options.icon(BitmapDescriptorFactory.fromResource(R.mipmap.progress));
+        } else if (jobMarker.getJobState() == Job.BLOCKED) {
+            options.icon(BitmapDescriptorFactory.fromResource(R.mipmap.block));
+        }
+        return mMap.addMarker(options);
     }
 
     private int drawJobPolyline(ArrayList<LocationData> locationData, int startIdx, int color, boolean extend) {
