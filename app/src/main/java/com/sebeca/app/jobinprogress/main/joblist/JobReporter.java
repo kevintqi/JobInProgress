@@ -32,7 +32,7 @@ public class JobReporter {
         JSONObject data = job.toJSON();
         if (data != null) {
             ServerUrlDataStore dataStore = new ServerUrlDataStore(mContext);
-            final String url = dataStore.get() + "/job/" + job.getId() + "/update";
+            final String url = dataStore.get() + "/api/job/" + job.getId() + "/update";
             Log.i(TAG, "URL: " + url);
             MyObjectRequest request = new MyObjectRequest(mContext, url, Request.Method.PUT, mCallback);
             request.send(data);
