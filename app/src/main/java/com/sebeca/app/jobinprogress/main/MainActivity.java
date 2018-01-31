@@ -5,23 +5,22 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.sebeca.app.jobinprogress.R;
-
-import static com.sebeca.app.jobinprogress.main.SectionsPagerAdapter.SECTION_BREAK_TIMER;
-import static com.sebeca.app.jobinprogress.main.SectionsPagerAdapter.SECTION_JOB_LIST;
-import static com.sebeca.app.jobinprogress.main.SectionsPagerAdapter.SECTION_MAPS;
-import static com.sebeca.app.jobinprogress.main.SectionsPagerAdapter.SECTION_SETTINGS;
+import com.sebeca.app.jobinprogress.main.breaktime.BreakTimeFragment;
+import com.sebeca.app.jobinprogress.main.joblist.JobListFragment;
+import com.sebeca.app.jobinprogress.main.map.JobMapsFragment;
+import com.sebeca.app.jobinprogress.main.settings.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
     private MainViewModel mMainViewModel;
 
     @Override
@@ -29,15 +28,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
         final Toolbar appBar = findViewById(R.id.app_bar);
         setSupportActionBar(appBar);
-
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
         mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+
         BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) bottomNavigation.getLayoutParams();
         layoutParams.setBehavior(new BottomNavigationViewBehavior());
@@ -47,23 +41,38 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         if (item.getItemId() == R.id.jobListView) {
-                            mViewPager.setCurrentItem(SECTION_JOB_LIST);
+                            pushFragment(new JobListFragment());
                             appBar.setTitle(item.getTitle());
                         }
                         if (item.getItemId() == R.id.jobMapsView) {
-                            mViewPager.setCurrentItem(SECTION_MAPS);
+                            pushFragment(new JobMapsFragment());
                             appBar.setTitle(item.getTitle());
                         }
                         if (item.getItemId() == R.id.breakTimeView) {
-                            mViewPager.setCurrentItem(SECTION_BREAK_TIMER);
+                            pushFragment(new BreakTimeFragment());
                             appBar.setTitle(item.getTitle());
                         }
                         if (item.getItemId() == R.id.settingsView) {
-                            mViewPager.setCurrentItem(SECTION_SETTINGS);
+                            pushFragment(new SettingsFragment());
                             appBar.setTitle(item.getTitle());
                         }
                         return true;
                     }
                 });
     }
+
+    private void pushFragment(Fragment fragment) {
+        if (fragment == null)
+            return;
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager != null) {
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            if (ft != null) {
+                ft.replace(R.id.fragment_container, fragment);
+                ft.commit();
+            }
+        }
+    }
+
 }
